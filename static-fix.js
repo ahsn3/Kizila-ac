@@ -123,6 +123,67 @@
     document.querySelectorAll('sr7-module').forEach(initHeroSlider);
   }
 
+  function fixHeroBackgrounds() {
+    document.querySelectorAll('sr7-bg').forEach(function (bg) {
+      bg.style.setProperty('display', 'block', 'important');
+      bg.style.setProperty('visibility', 'visible', 'important');
+
+      var inline = bg.getAttribute('style') || '';
+      var match = inline.match(/background\s*:\s*url\(['"]?([^'")]+)['"]?\)/i);
+      if (match && match[1]) {
+        bg.style.setProperty('background-image', 'url("' + match[1] + '")', 'important');
+        bg.style.setProperty('background-size', 'cover', 'important');
+        bg.style.setProperty('background-position', 'center', 'important');
+        bg.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+    });
+  }
+
+  function disableLenisScroll() {
+    if (window.lenisInstance && typeof window.lenisInstance.destroy === 'function') {
+      window.lenisInstance.destroy();
+      window.lenisInstance = null;
+    }
+    document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-scrolling', 'lenis-stopped');
+    document.documentElement.style.scrollBehavior = 'smooth';
+  }
+
+  function initScrollReveal() {
+    var targets = document.querySelectorAll(
+      '.elementor-invisible, .elementor-widget[data-settings*="animation"], .elementor-widget[data-settings*="_animation"]'
+    );
+
+    targets.forEach(function (el, index) {
+      el.classList.remove('elementor-invisible', 'animated', 'animated-slow');
+      el.style.animation = 'none';
+      el.classList.add('kiz-fade-up');
+      el.style.transitionDelay = Math.min(index * 0.04, 0.24) + 's';
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.kiz-fade-up').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -5% 0px' }
+    );
+
+    document.querySelectorAll('.kiz-fade-up').forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
   function disableJarallax() {
     document.querySelectorAll('[data-jarallax], [data-jarallax-element], .jarallax').forEach(function (el) {
       el.removeAttribute('data-jarallax');
@@ -138,6 +199,52 @@
     }
   }
 
+  function siteRootPrefix() {
+    var parts = window.location.pathname.replace(/\\/g, '/').split('/').filter(Boolean);
+    if (parts.length && (parts[parts.length - 1] === 'index.html' || parts[parts.length - 1].indexOf('.') !== -1)) {
+      parts.pop();
+    }
+    return parts.length ? '../'.repeat(parts.length) : './';
+  }
+
+  function fixFooter() {
+    var footer = document.getElementById('colophon');
+    if (!footer) return;
+
+    var root = siteRootPrefix();
+
+    footer.querySelectorAll('a[href*="unilancerlabs"]').forEach(function (link) {
+      var title = link.querySelector('.ekit-heading--title');
+      if (title) {
+        title.textContent = title.textContent
+          .replace(/\s*\.?\s*by\s*unilancerlabs\.com/gi, '')
+          .replace(/\s*\|\s*$/g, '')
+          .replace(/\s{2,}/g, ' ')
+          .trim();
+        if (!title.textContent) {
+          title.textContent = '© 2026 Kızılağaç İnşaat · Tüm Hakları Saklıdır';
+        }
+      }
+      var wrapper = link.closest('.ekit-heading');
+      if (wrapper && link.parentNode) {
+        while (link.firstChild) {
+          wrapper.insertBefore(link.firstChild, link);
+        }
+        link.remove();
+      }
+    });
+
+    footer.querySelectorAll('.elementor-element-48d6ff42 a[href="#"]').forEach(function (a) {
+      a.setAttribute('href', root + 'index.html');
+    });
+
+    footer.querySelectorAll('.elementor-element-7ab684f3 a').forEach(function (a) {
+      if (a.getAttribute('href') && a.getAttribute('href').indexOf('anasayfa') !== -1) {
+        a.setAttribute('href', root + 'index.html');
+      }
+    });
+  }
+
   /* ---- SR7 path patches ---- */
   if (window.SR7 && SR7.E) {
     SR7.E.plugin_url = 'wp-content/plugins/revslider/';
@@ -147,9 +254,19 @@
   }
 
   function init() {
+    fixHeroBackgrounds();
     initAllHeroSliders();
     disableJarallax();
+    disableLenisScroll();
+    initScrollReveal();
+    fixFooter();
   }
+
+  window.addEventListener('load', function () {
+    disableLenisScroll();
+    fixHeroBackgrounds();
+    fixFooter();
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
