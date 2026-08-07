@@ -625,6 +625,30 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
   text-align: center !important;
 }
 
+@media (min-width: 768px) {
+  #colophon .elementor-element-48d6ff42 {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+
+  #colophon .elementor-element-48d6ff42 .elementor-widget-heading,
+  #colophon .elementor-element-48d6ff42 .elementor-widget-text-editor,
+  #colophon .elementor-element-48d6ff42 .elementor-widget-container {
+    text-align: left !important;
+    align-self: flex-start !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #colophon .elementor-element-b10d0b1 .elementor-heading-title,
+  #colophon .elementor-element-48d6ff42 .elementor-widget-text-editor p {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
 #colophon .elementor-element-b10d0b1 .elementor-heading-title {
   color: #1c1c1d !important;
   font-size: 12px !important;
@@ -1015,11 +1039,6 @@ body:not(.home) .elementor-element-4a935a {
 }
 
 @media (min-width: 1025px) {
-  #colophon .elementor-element-48d6ff42 {
-    text-align: left !important;
-    align-items: flex-start !important;
-  }
-
   #colophon .elementor-element-1ed1b81d {
     align-items: flex-start !important;
   }
