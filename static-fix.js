@@ -678,12 +678,119 @@
       '<img src="' + flagBase + 'en_US.svg" alt="" width="22" height="16" loading="lazy"><span>EN</span></a>' +
       '</nav>';
 
-    document.querySelectorAll('.elementor-10968 .elementor-element-864fe55, .elementor-10968 .elementor-element-7e150df').forEach(function (widget) {
+    document.querySelectorAll('.elementor-10968 .elementor-element-864fe55').forEach(function (widget) {
       if (widget.querySelector('.kiz-lang-switch')) return;
 
       var host = widget.querySelector('.elementor-widget-container') || widget;
       host.innerHTML = switcherHtml;
     });
+
+    document.querySelectorAll('.elementor-10968 .elementor-element-7e150df .elementor-widget-container').forEach(function (host) {
+      host.innerHTML = '';
+    });
+
+    var mobileNav = document.querySelector('.antra-mobile-nav .handheld-navigation');
+    if (mobileNav && !mobileNav.querySelector('.kiz-lang-switch-mobile')) {
+      var mobileWrap = document.createElement('div');
+      mobileWrap.className = 'kiz-lang-switch-mobile';
+      mobileWrap.innerHTML = switcherHtml;
+      mobileNav.appendChild(mobileWrap);
+    }
+  }
+
+  var CONTACT_ICONS = {
+    address:
+      '<svg class="kiz-contact-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+      '<path d="M12 21s7-4.438 7-10.5a7 7 0 1 0-14 0C5 16.562 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>' +
+      '<circle cx="12" cy="10.5" r="2.25" fill="none" stroke="currentColor" stroke-width="1.75"/></svg>',
+    phone:
+      '<svg class="kiz-contact-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+      '<path d="M5.5 4h3l1.5 5-2 1.5a11 11 0 0 0 5 5L14.5 14l5 1.5v3A2 2 0 0 1 17.5 20C10.5 20 4 13.5 4 6.5A2 2 0 0 1 5.5 4z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>',
+    email:
+      '<svg class="kiz-contact-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+      '<rect x="3.5" y="5.5" width="17" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.75"/>' +
+      '<path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>'
+  };
+
+  function initContactPage() {
+    var page = document.querySelector('.elementor-35');
+    if (!page || page.dataset.kizContactBound) return;
+    page.dataset.kizContactBound = '1';
+
+    document.body.classList.add('kiz-contact-page');
+
+    var infoCol = page.querySelector('.elementor-element-baf4453');
+    var mapWrap = page.querySelector('.elementor-element-bcbf82e');
+    var photoCol = page.querySelector('.elementor-element-54720d3');
+    var infoRow = page.querySelector('.elementor-element-254771e');
+    if (!infoCol || !mapWrap) return;
+
+    if (photoCol) photoCol.style.setProperty('display', 'none', 'important');
+    if (infoRow) infoRow.classList.add('kiz-contact-info-row');
+
+    var cardsRow = page.querySelector('.kiz-contact-cards-row');
+    if (!cardsRow) {
+      cardsRow = document.createElement('div');
+      cardsRow.className = 'kiz-contact-cards-row';
+      mapWrap.parentNode.insertBefore(cardsRow, mapWrap);
+      cardsRow.appendChild(infoCol);
+      cardsRow.appendChild(mapWrap);
+    }
+
+    infoCol.classList.add('kiz-contact-info-card-wrap');
+    mapWrap.classList.add('kiz-contact-map-card-wrap');
+
+    if (infoCol.querySelector('.kiz-contact-info-card')) return;
+
+    var isEn = (window.location.pathname || '').indexOf('/en/') !== -1;
+    var labels = isEn
+      ? { address: 'ADDRESS', phone: 'PHONE', email: 'EMAIL' }
+      : { address: 'ADRES', phone: 'TELEFON', email: 'E-POSTA' };
+
+    function readText(selector) {
+      var el = page.querySelector(selector);
+      if (!el) return '';
+      return (el.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    var addressHtml = page.querySelector('.elementor-element-d0d91db');
+    var address = addressHtml ? addressHtml.innerHTML.trim() : '';
+    var phoneRaw = readText('.elementor-element-bdbe4fd');
+    var emailNode = page.querySelector('.elementor-element-77b6b6c a, .elementor-element-77b6b6c p');
+    var emailText = emailNode ? (emailNode.textContent || '').trim() : '';
+    var emailHref = emailNode && emailNode.getAttribute('href') ? emailNode.getAttribute('href') : 'mailto:' + emailText;
+    if (emailHref.indexOf('mailto:') !== 0 && emailHref.indexOf('http') !== 0) {
+      emailHref = 'mailto:' + emailText;
+    }
+    var phoneHref = 'tel:' + phoneRaw.replace(/[^\d+]/g, '');
+
+    infoCol.querySelectorAll('.elementor-widget').forEach(function (widget) {
+      widget.style.setProperty('display', 'none', 'important');
+    });
+
+    var card = document.createElement('div');
+    card.className = 'kiz-contact-info-card';
+    card.innerHTML =
+      '<div class="kiz-contact-info-item">' +
+      '<div class="kiz-contact-info-icon">' + CONTACT_ICONS.address + '</div>' +
+      '<div class="kiz-contact-info-body">' +
+      '<h3 class="kiz-contact-info-label">' + labels.address + '</h3>' +
+      '<div class="kiz-contact-info-value">' + address + '</div>' +
+      '</div></div>' +
+      '<div class="kiz-contact-info-item">' +
+      '<div class="kiz-contact-info-icon">' + CONTACT_ICONS.phone + '</div>' +
+      '<div class="kiz-contact-info-body">' +
+      '<h3 class="kiz-contact-info-label">' + labels.phone + '</h3>' +
+      '<p class="kiz-contact-info-value"><a href="' + phoneHref + '">' + phoneRaw + '</a></p>' +
+      '</div></div>' +
+      '<div class="kiz-contact-info-item">' +
+      '<div class="kiz-contact-info-icon">' + CONTACT_ICONS.email + '</div>' +
+      '<div class="kiz-contact-info-body">' +
+      '<h3 class="kiz-contact-info-label">' + labels.email + '</h3>' +
+      '<p class="kiz-contact-info-value"><a href="' + emailHref + '">' + emailText + '</a></p>' +
+      '</div></div>';
+
+    infoCol.appendChild(card);
   }
 
   function initDesktopDropdowns() {
@@ -1334,6 +1441,7 @@
     initDesktopDropdowns();
     markActiveNav();
     initLanguageSwitcher();
+    initContactPage();
     initProjectGridToggle();
     fixHeader();
     fixInnerPageHeroes();
@@ -1371,6 +1479,7 @@
     initDesktopDropdowns();
     markActiveNav();
     initLanguageSwitcher();
+    initContactPage();
     initProjectGridToggle();
     fixInnerPageHeroes();
     fixFooter();

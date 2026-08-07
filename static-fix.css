@@ -2296,3 +2296,180 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
     padding-right: 16px !important;
   }
 }
+
+/* ---- Contact page (İletişim / Contact) ---- */
+body.kiz-contact-page .elementor-35 .elementor-element-54720d3 {
+  display: none !important;
+}
+
+body.kiz-contact-page .elementor-35 .elementor-element-254771e {
+  padding-bottom: 0 !important;
+}
+
+.kiz-contact-cards-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  width: min(100%, 1080px);
+  margin: 0 auto 28px;
+  padding: 0 clamp(16px, 3vw, 30px);
+  align-items: stretch;
+}
+
+.kiz-contact-info-card-wrap,
+.kiz-contact-map-card-wrap {
+  min-width: 0;
+}
+
+.kiz-contact-info-card-wrap {
+  background: #fff !important;
+  border: 1px solid rgba(28, 28, 29, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 32px rgba(28, 28, 29, 0.06) !important;
+  padding: 22px 20px !important;
+  margin: 0 !important;
+}
+
+.kiz-contact-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.kiz-contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.kiz-contact-info-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #a62626;
+  background: rgba(166, 38, 38, 0.1);
+}
+
+.kiz-contact-info-icon .kiz-contact-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.kiz-contact-info-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.kiz-contact-info-label {
+  margin: 0 0 4px !important;
+  color: #1c1c1d !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+.kiz-contact-info-value {
+  margin: 0 !important;
+  color: #59585d !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1.55 !important;
+}
+
+.kiz-contact-info-value a {
+  color: inherit !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+}
+
+.kiz-contact-info-value a:hover {
+  color: #a62626 !important;
+}
+
+.kiz-contact-map-card-wrap {
+  background: #fff !important;
+  border: 1px solid rgba(28, 28, 29, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 32px rgba(28, 28, 29, 0.06) !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+.kiz-contact-map-card-wrap .elementor-widget-container,
+.kiz-contact-map-card-wrap .elementor-custom-embed {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100%;
+}
+
+.kiz-contact-map-card-wrap iframe {
+  display: block !important;
+  width: 100% !important;
+  height: 240px !important;
+  min-height: 240px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+}
+
+body.kiz-contact-page .elementor-35 .elementor-element-69d0dcf {
+  width: min(100%, 1080px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(16px, 3vw, 30px) !important;
+  padding-right: clamp(16px, 3vw, 30px) !important;
+}
+
+body.kiz-contact-page .elementor-35 .elementor-element-bcbf82e {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Language switcher inside mobile hamburger menu */
+.kiz-lang-switch-mobile {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(28, 28, 29, 0.08);
+}
+
+.kiz-lang-switch-mobile .kiz-lang-switch {
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .kiz-contact-map-card-wrap iframe {
+    height: 100% !important;
+    min-height: 300px !important;
+  }
+
+  .kiz-lang-switch-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .elementor-10968 .elementor-element-7e150df {
+    display: none !important;
+  }
+
+  .kiz-contact-cards-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .kiz-contact-info-card-wrap {
+    padding: 18px 16px !important;
+  }
+
+  .kiz-contact-map-card-wrap iframe {
+    height: 220px !important;
+    min-height: 220px !important;
+  }
+}
