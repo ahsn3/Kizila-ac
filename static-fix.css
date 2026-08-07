@@ -13,6 +13,24 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html,
+body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+#content,
+.site-content,
+.elementor-location-header {
+  transform: translateZ(0);
+}
+
 html.lenis,
 html.lenis body {
   height: auto;
@@ -97,16 +115,14 @@ body {
 
 .kiz-fade-up {
   opacity: 0;
-  transform: translate3d(0, 32px, 0);
-  transition: opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .kiz-fade-up.is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  will-change: auto;
 }
 
 /* ---- RevSlider static hero ---- */

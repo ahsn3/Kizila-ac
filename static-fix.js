@@ -295,6 +295,10 @@
     fixFooter();
   });
 
+  window.addEventListener('scroll', function () {
+    disableMotionEffects();
+  }, { passive: true });
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

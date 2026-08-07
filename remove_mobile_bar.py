@@ -17,7 +17,7 @@ def main():
     n = 0
     for path in ROOT.rglob("*.html"):
         text = path.read_text(encoding="utf-8", errors="replace")
-        new = PATTERN.sub("\n", text, count=1)
+        new = PATTERN.sub("\n\t\t<footer", text, count=1)
         if new != text:
             path.write_text(new, encoding="utf-8")
             n += 1
