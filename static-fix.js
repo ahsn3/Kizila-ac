@@ -141,8 +141,9 @@
     swipeZone.addEventListener(
       'touchstart',
       function (e) {
-        touchStartX = e.changedTouches[0].clientX;
-        touchStartY = e.changedTouches[0].clientY;
+        if (!e.touches[0]) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
       },
       { passive: true }
     );
@@ -150,6 +151,7 @@
     swipeZone.addEventListener(
       'touchend',
       function (e) {
+        if (!e.changedTouches[0]) return;
         handleHeroSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
       },
       { passive: true }
@@ -182,7 +184,7 @@
   var HERO_BG = {
     living: 'hero-background/hero-living.png',
     kitchen: 'hero-background/hero-kitchen.png',
-    bedroom: 'hero-background/hero-bedroom.png'
+    architecture: 'hero-background/Mimarlık Hizmetleri.png'
   };
 
   var SERVICE_PHOTOS = {
