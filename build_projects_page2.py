@@ -60,8 +60,7 @@ def deepen_relative_paths(text: str) -> str:
 
 def fix_loop_paths(loop_html: str, prefix: str) -> str:
     loop_html = re.sub(r"https?://kizilagacinsaat\.com/", prefix, loop_html)
-    loop_html = loop_html.replace('src="../', 'src="' + prefix)
-    loop_html = loop_html.replace("src='../", "src='" + prefix)
+    loop_html = re.sub(r"(?:\.\./)+wp-content/", prefix + "wp-content/", loop_html)
     return loop_html
 
 
@@ -98,6 +97,7 @@ def build_page(cfg: dict) -> None:
     loop = fetch_loop_html(cfg["wp_url"])
     loop = fix_loop_paths(loop, prefix)
     text = replace_loop_container(text, loop)
+    text = re.sub(r"(?:\.\./)+wp-content/", prefix + "wp-content/", text)
 
     pagination = build_pagination(cfg["page_num"], cfg["pagination_prev"], cfg["pagination_next"], is_en)
     text = re.sub(
