@@ -1076,3 +1076,285 @@ body:not(.home) .elementor-element-4a935a {
   display: flex !important;
   width: 100% !important;
 }
+
+/* ---- Modern site enhancements ---- */
+:root {
+  --kiz-brand: #a62626;
+  --kiz-brand-dark: #7a0000;
+  --kiz-ink: #1c1c1d;
+  --kiz-muted: #59585d;
+  --kiz-surface: #f2f0eb;
+  --kiz-radius: 12px;
+  --kiz-radius-lg: 16px;
+  --kiz-shadow-sm: 0 4px 20px rgba(28, 28, 29, 0.06);
+  --kiz-shadow-md: 0 12px 40px rgba(28, 28, 29, 0.1);
+  --kiz-shadow-lg: 0 20px 56px rgba(28, 28, 29, 0.12);
+  --kiz-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --kiz-transition: 0.35s var(--kiz-ease);
+}
+
+::selection {
+  background: rgba(166, 38, 38, 0.18);
+  color: var(--kiz-ink);
+}
+
+/* Glass navbar — stronger on scroll */
+body.home:not(.kiz-scrolled) .elementor-10968 .elementor-element-bf83e51,
+body.home:not(.kiz-scrolled) .elementor-10968 .elementor-element-b145162 {
+  background-color: rgba(242, 240, 235, 0.72) !important;
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  transition: background-color var(--kiz-transition), box-shadow var(--kiz-transition),
+    backdrop-filter var(--kiz-transition);
+}
+
+body.kiz-scrolled .elementor-10968 .elementor-element-bf83e51,
+body.kiz-scrolled .elementor-10968 .elementor-element-b145162,
+body:not(.home) .elementor-10968 .elementor-element-bf83e51,
+body:not(.home) .elementor-10968 .elementor-element-b145162 {
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 8px 32px rgba(28, 28, 29, 0.08);
+  border-bottom: 1px solid rgba(28, 28, 29, 0.06);
+  transition: background-color var(--kiz-transition), box-shadow var(--kiz-transition),
+    backdrop-filter var(--kiz-transition);
+}
+
+/* Nav link underline */
+@media (min-width: 768px) {
+  .elementor-10968 .main-navigation .menu > li > a {
+    position: relative;
+    transition: color var(--kiz-transition);
+  }
+
+  .elementor-10968 .main-navigation .menu > li > a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background: var(--kiz-brand);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--kiz-transition);
+  }
+
+  .elementor-10968 .main-navigation .menu > li > a:hover::after,
+  .elementor-10968 .main-navigation .menu > li.current-menu-item > a::after,
+  .elementor-10968 .main-navigation .menu > li.current_page_item > a::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Logo micro-interaction */
+.elementor-10968 .elementor-element-9c49ce4 img,
+.elementor-10968 .elementor-element-e1771f2 img {
+  transition: transform var(--kiz-transition), opacity var(--kiz-transition);
+}
+
+.elementor-10968 .elementor-element-9c49ce4 a:hover img,
+.elementor-10968 .elementor-element-e1771f2 a:hover img {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+/* Hero cinematic overlay + subtle zoom */
+sr7-module::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.06) 38%,
+    rgba(0, 0, 0, 0.42) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  sr7-slide.sr7-static-active sr7-bg img {
+    animation: kiz-hero-zoom 14s var(--kiz-ease) forwards;
+    transform-origin: center center;
+  }
+}
+
+@keyframes kiz-hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
+  }
+}
+
+#SR7_1_1-1-14,
+#SR7_1_1-6-16 {
+  border-radius: 999px !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#SR7_1_1-1-14:hover,
+#SR7_1_1-6-16:hover {
+  box-shadow: 0 10px 28px rgba(166, 38, 38, 0.35);
+}
+
+.sr7-static-bullet {
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+  opacity: 0.75;
+  transition: opacity var(--kiz-transition), transform var(--kiz-transition);
+}
+
+.sr7-static-bullet.is-active {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Project cards */
+.loop-card,
+.elementor-element-bcf9e37.loop-card {
+  border-radius: var(--kiz-radius-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--kiz-shadow-sm) !important;
+  transition: transform var(--kiz-transition), box-shadow var(--kiz-transition) !important;
+  transform: none !important;
+  will-change: transform;
+}
+
+.loop-card:hover,
+.elementor-element-bcf9e37.loop-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: var(--kiz-shadow-md) !important;
+}
+
+.loop-card .elementor-widget-theme-post-featured-image,
+.loop-card .elementor-widget-image {
+  overflow: hidden !important;
+}
+
+.loop-card img {
+  transition: transform 0.65s var(--kiz-ease), filter var(--kiz-transition) !important;
+}
+
+.loop-card:hover img {
+  transform: scale(1.06);
+  filter: brightness(1.04) saturate(1.06);
+}
+
+/* Category filter pills */
+.elementor-widget-taxonomy-filter .e-filter-item,
+.elementor-widget-taxonomy-filter button {
+  border-radius: 999px !important;
+  transition: background var(--kiz-transition), color var(--kiz-transition),
+    transform var(--kiz-transition), box-shadow var(--kiz-transition) !important;
+}
+
+.elementor-widget-taxonomy-filter .e-filter-item:hover,
+.elementor-widget-taxonomy-filter button:hover {
+  transform: translateY(-1px);
+}
+
+/* Buttons */
+.elementor-button,
+.wpcf7 input[type="submit"],
+.wp-block-button__link {
+  border-radius: 999px !important;
+  transition: transform var(--kiz-transition), box-shadow var(--kiz-transition),
+    background var(--kiz-transition), border-color var(--kiz-transition) !important;
+}
+
+.elementor-button:hover,
+.wpcf7 input[type="submit"]:hover,
+.wp-block-button__link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(166, 38, 38, 0.22);
+}
+
+/* Forms */
+.wpcf7 input:not([type="submit"]),
+.wpcf7 textarea,
+.wpcf7 select {
+  border-radius: var(--kiz-radius) !important;
+  border: 1px solid rgba(28, 28, 29, 0.12) !important;
+  transition: border-color var(--kiz-transition), box-shadow var(--kiz-transition) !important;
+}
+
+.wpcf7 input:not([type="submit"]):focus,
+.wpcf7 textarea:focus,
+.wpcf7 select:focus {
+  border-color: rgba(166, 38, 38, 0.45) !important;
+  box-shadow: 0 0 0 4px rgba(166, 38, 38, 0.1) !important;
+  outline: none !important;
+}
+
+/* Inner page heroes */
+body:not(.home) .kiz-page-hero {
+  position: relative;
+}
+
+body:not(.home) .kiz-page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.48) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+body:not(.home) .kiz-page-hero > .e-con-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* Content images */
+.elementor-widget-image:not(#colophon .elementor-widget-image) img {
+  transition: transform 0.55s var(--kiz-ease);
+}
+
+.elementor-widget-image:not(#colophon .elementor-widget-image) a:hover img {
+  transform: scale(1.02);
+}
+
+/* Refined scroll reveal */
+.kiz-fade-up {
+  transform: translate3d(0, 32px, 0);
+  transition: opacity 0.65s var(--kiz-ease), transform 0.65s var(--kiz-ease);
+}
+
+.kiz-fade-up.is-visible {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Service accordion / infobox polish */
+.elementskit-infobox:not(#colophon .elementskit-infobox) {
+  transition: transform var(--kiz-transition), box-shadow var(--kiz-transition);
+}
+
+.elementskit-infobox:not(#colophon .elementskit-infobox):hover {
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  sr7-slide.sr7-static-active sr7-bg img,
+  .loop-card,
+  .loop-card img,
+  .kiz-fade-up,
+  .elementor-button,
+  .wpcf7 input[type="submit"] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  body.kiz-scrolled .elementor-10968 .elementor-element-bf83e51,
+  body.kiz-scrolled .elementor-10968 .elementor-element-b145162 {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
