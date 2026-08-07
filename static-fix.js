@@ -312,12 +312,119 @@
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       var href = link.getAttribute('href');
       if (!href || href === '#') return;
+      if (link.classList.contains('menu-mobile-nav-button') || link.classList.contains('mobile-nav-close')) {
+        return;
+      }
 
       link.addEventListener('click', function (e) {
         var target = document.querySelector(href);
         if (!target) return;
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function initMobileMenu() {
+    var html = document.documentElement;
+
+    if (window.jQuery) {
+      window.jQuery('.menu-mobile-nav-button, .antra-overlay, .mobile-nav-close').off('click');
+      window.jQuery('.handheld-navigation .dropdown-toggle').off('click');
+    }
+
+    document.querySelectorAll('.handheld-navigation .dropdown-toggle').forEach(function (el) {
+      el.remove();
+    });
+
+    function closeMobileNav() {
+      html.classList.remove('mobile-nav-active');
+    }
+
+    function toggleMobileNav() {
+      html.classList.toggle('mobile-nav-active');
+    }
+
+    document.querySelectorAll('.menu-mobile-nav-button').forEach(function (btn) {
+      if (btn.dataset.kizMobileBound) return;
+      btn.dataset.kizMobileBound = '1';
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleMobileNav();
+      });
+    });
+
+    document.querySelectorAll('.antra-overlay, .mobile-nav-close').forEach(function (el) {
+      if (el.dataset.kizMobileBound) return;
+      el.dataset.kizMobileBound = '1';
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeMobileNav();
+      });
+    });
+
+    document.querySelectorAll('.handheld-navigation .menu-item-has-children').forEach(function (li) {
+      if (li.querySelector('.kiz-mobile-submenu-toggle')) return;
+
+      var toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'kiz-mobile-submenu-toggle';
+      toggle.setAttribute('aria-label', 'Alt menüyü aç');
+      toggle.setAttribute('aria-expanded', 'false');
+      li.appendChild(toggle);
+
+      toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var open = li.classList.toggle('kiz-mobile-submenu-open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        closeMobileNav();
+      }
+    });
+  }
+
+  function initDesktopDropdowns() {
+    var nav = document.querySelector('.elementor-10968 .main-navigation .menu');
+    if (!nav) return;
+
+    var CLOSE_DELAY = 280;
+    var items = nav.querySelectorAll(':scope > li.menu-item-has-children');
+    if (!items.length) return;
+
+    items.forEach(function (li) {
+      if (li.dataset.kizDropdownBound) return;
+      li.dataset.kizDropdownBound = '1';
+
+      var closeTimer = null;
+
+      function openSubmenu() {
+        if (closeTimer) {
+          window.clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+        li.classList.add('kiz-submenu-open');
+      }
+
+      function scheduleClose() {
+        if (closeTimer) window.clearTimeout(closeTimer);
+        closeTimer = window.setTimeout(function () {
+          li.classList.remove('kiz-submenu-open');
+          closeTimer = null;
+        }, CLOSE_DELAY);
+      }
+
+      li.addEventListener('mouseenter', openSubmenu);
+      li.addEventListener('mouseleave', scheduleClose);
+      li.addEventListener('focusin', openSubmenu);
+      li.addEventListener('focusout', function (e) {
+        if (!li.contains(e.relatedTarget)) {
+          scheduleClose();
+        }
       });
     });
   }
@@ -583,46 +690,6 @@
     });
   }
 
-  function initMobileMenuDismiss() {
-    function closeMobileNav() {
-      document.documentElement.classList.remove('mobile-nav-active');
-    }
-
-    function bindOnce(el, event, handler) {
-      if (!el || el.dataset.kizMenuBound) return;
-      el.dataset.kizMenuBound = '1';
-      el.addEventListener(event, handler);
-    }
-
-    document.querySelectorAll('.menu-mobile-nav-button').forEach(function (btn) {
-      bindOnce(btn, 'click', function (e) {
-        e.preventDefault();
-        document.documentElement.classList.toggle('mobile-nav-active');
-      });
-    });
-
-    document.querySelectorAll('.mobile-nav-close').forEach(function (btn) {
-      bindOnce(btn, 'click', function (e) {
-        e.preventDefault();
-        closeMobileNav();
-      });
-    });
-
-    document.querySelectorAll('.antra-overlay').forEach(function (overlay) {
-      bindOnce(overlay, 'click', function (e) {
-        e.preventDefault();
-        closeMobileNav();
-      });
-    });
-
-    document.querySelectorAll('.antra-mobile-nav a[href]').forEach(function (link) {
-      if (link.getAttribute('href') === '#') return;
-      bindOnce(link, 'click', function () {
-        closeMobileNav();
-      });
-    });
-  }
-
   function fixFooter() {
     var footer = document.getElementById('colophon');
     if (!footer) return;
@@ -832,12 +899,13 @@
     initScrollReveal();
     initHeaderScroll();
     initSmoothAnchors();
+    initMobileMenu();
+    initDesktopDropdowns();
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
     fixWhatsAppButton();
     fixMobileHeader();
-    initMobileMenuDismiss();
     removeScrollToTop();
   }
 
@@ -845,6 +913,7 @@
     applySiteHeader();
     fixMobileHeader();
     fixFooter();
+    initDesktopDropdowns();
   });
 
   window.addEventListener('load', function () {
@@ -859,12 +928,15 @@
     injectHomeHeroCtas();
     forceHeroTextWhite();
     fixHeader();
+    initMobileMenu();
+    initDesktopDropdowns();
     fixInnerPageHeroes();
     fixFooter();
     fixWhatsAppButton();
     fixMobileHeader();
-    initMobileMenuDismiss();
     removeScrollToTop();
+    window.setTimeout(initMobileMenu, 300);
+    window.setTimeout(initDesktopDropdowns, 300);
     window.setTimeout(fixPageScroll, 250);
     window.setTimeout(applySiteHeader, 250);
     window.setTimeout(fixMobileHeader, 250);

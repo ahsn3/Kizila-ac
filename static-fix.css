@@ -1,11 +1,40 @@
 /* Static site fixes for Kızılağaç İnşaat clone */
 
 /* ---- Overlays ---- */
-.antra-overlay,
 .site-search-popup-overlay,
 .site-search-popup:not(.active) {
   display: none !important;
   pointer-events: none !important;
+}
+
+.antra-overlay {
+  display: block !important;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.mobile-nav-active .antra-overlay {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+html.mobile-nav-active {
+  overflow: hidden !important;
+}
+
+html.mobile-nav-active .antra-mobile-nav {
+  transform: translate3d(0, 0, 0) !important;
+  visibility: visible !important;
+}
+
+.antra-mobile-nav {
+  z-index: 10001 !important;
+}
+
+.antra-overlay {
+  z-index: 10000 !important;
 }
 
 /* ---- Smooth scrolling & performance ---- */
@@ -1009,7 +1038,7 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
     flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 0 28px !important;
+    gap: 0 6px !important;
     list-style: none !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -1027,7 +1056,7 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
     white-space: nowrap !important;
     padding: 8px 14px !important;
     border-radius: 8px !important;
-    transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease !important;
+    transition: color 0.25s ease, background-color 0.25s ease !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a:hover {
@@ -1043,24 +1072,72 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
     font-weight: 600 !important;
   }
 
-  .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu {
-    display: none;
-    position: absolute !important;
-    top: calc(100% + 8px) !important;
-    left: 0 !important;
-    min-width: 240px !important;
-    margin: 0 !important;
-    padding: 10px 0 !important;
-    list-style: none !important;
-    background: #fff !important;
-    border-radius: 8px !important;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
-    z-index: 1001 !important;
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.menu-item-has-children > a {
+    padding-right: 28px !important;
+    position: relative !important;
   }
 
-  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li:hover > .sub-menu,
-  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li:focus-within > .sub-menu {
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li:not(.kiz-submenu-open) > .sub-menu {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.menu-item-has-children > a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 14px;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu {
     display: block !important;
+    position: absolute !important;
+    top: calc(100% + 4px) !important;
+    left: 0 !important;
+    min-width: 260px !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    list-style: none !important;
+    background: #fff !important;
+    border: 1px solid rgba(28, 28, 29, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 16px 40px rgba(28, 28, 29, 0.14) !important;
+    z-index: 1001 !important;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(0.98);
+    transform-origin: top left;
+    pointer-events: none;
+    transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0.22s ease;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.kiz-submenu-open > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu > li > a {
+    display: block !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    color: #1c1c1d !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    transition: color 0.2s ease, background-color 0.2s ease !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu > li > a:hover,
+  .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu > li.current-menu-item > a {
+    color: #a62626 !important;
+    background-color: rgba(166, 38, 38, 0.08) !important;
   }
 
   .elementor-10968 .elementor-element-864fe55 {
@@ -1632,6 +1709,146 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
 
   .elementor-10968 .elementor-element-0cff662 .antra-icon {
     margin: 0 !important;
+  }
+
+  .elementor-10968 .menu-mobile-nav-button .antra-icon > span {
+    background-color: #1c1c1d !important;
+  }
+
+  .elementor-10968 .menu-mobile-nav-button:hover .antra-icon > span {
+    background-color: #a62626 !important;
+  }
+
+  /* Mobile drawer — match modern navbar */
+  .antra-mobile-nav {
+    width: min(88vw, 320px) !important;
+    background: #f2f0eb !important;
+    box-shadow: 8px 0 32px rgba(28, 28, 29, 0.12) !important;
+  }
+
+  .mobile-nav-close {
+    color: #1c1c1d !important;
+    top: 18px !important;
+    right: 18px !important;
+  }
+
+  .antra-mobile-nav .mobile-nav-tabs {
+    padding-top: 56px !important;
+  }
+
+  .antra-mobile-nav .mobile-nav-tabs ul li {
+    color: #1c1c1d !important;
+    font-weight: 600 !important;
+  }
+
+  .antra-mobile-nav .mobile-menu-tab {
+    padding: 0 16px 24px !important;
+  }
+
+  .handheld-navigation .menu {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .handheld-navigation .menu > li {
+    margin: 0 0 4px !important;
+    position: relative !important;
+  }
+
+  .handheld-navigation .menu > li > a {
+    display: block !important;
+    padding: 12px 44px 12px 14px !important;
+    border-radius: 8px !important;
+    color: #1c1c1d !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease, background-color 0.2s ease !important;
+  }
+
+  .handheld-navigation .menu > li > a:hover,
+  .handheld-navigation .menu > li.current-menu-item > a,
+  .handheld-navigation .menu > li.current_page_item > a {
+    color: #a62626 !important;
+    background-color: rgba(166, 38, 38, 0.12) !important;
+    font-weight: 600 !important;
+  }
+
+  .handheld-navigation .sub-menu {
+    display: block !important;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 0 0 8px !important;
+    border-left: 2px solid transparent;
+    transition: max-height 0.28s ease, opacity 0.22s ease, margin 0.22s ease, border-color 0.22s ease;
+  }
+
+  .handheld-navigation .menu-item-has-children.kiz-mobile-submenu-open > .sub-menu {
+    max-height: 520px;
+    opacity: 1;
+    margin: 4px 0 8px !important;
+    border-left-color: rgba(166, 38, 38, 0.2) !important;
+  }
+
+  .handheld-navigation .sub-menu > li > a {
+    display: block !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    color: #59585d !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+  }
+
+  .handheld-navigation .sub-menu > li > a:hover,
+  .handheld-navigation .sub-menu > li.current-menu-item > a {
+    color: #a62626 !important;
+    background-color: rgba(166, 38, 38, 0.08) !important;
+  }
+
+  .handheld-navigation .dropdown-toggle {
+    display: none !important;
+  }
+
+  .kiz-mobile-submenu-toggle {
+    position: absolute !important;
+    top: 6px !important;
+    right: 4px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.2s ease !important;
+  }
+
+  .kiz-mobile-submenu-toggle::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #1c1c1d;
+    border-bottom: 2px solid #1c1c1d;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    margin-top: -3px;
+  }
+
+  .kiz-mobile-submenu-toggle:hover {
+    background-color: rgba(166, 38, 38, 0.08) !important;
+  }
+
+  .menu-item-has-children.kiz-mobile-submenu-open > .kiz-mobile-submenu-toggle::before {
+    transform: rotate(-135deg);
+    margin-top: 3px;
+    border-color: #a62626;
   }
 
   /* Shorter mobile footer: logo + tagline + copyright only */
