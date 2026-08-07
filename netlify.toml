@@ -1,0 +1,26 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+
+# WordPress-style trailing slash redirects
+[[redirects]]
+  from = "/:path"
+  to = "/:path/"
+  status = 301
+  conditions = {Exists = [{Path = "/:path/index.html"}]}
+
+# Block WordPress admin/API paths
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/wp-json/*"
+  to = "/404.html"
+  status = 404
