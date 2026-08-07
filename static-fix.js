@@ -514,6 +514,36 @@
     return parts.length ? '../'.repeat(parts.length) : './';
   }
 
+  function homePageUrl() {
+    var root = siteRootPrefix();
+    var isEn = (window.location.pathname || '').indexOf('/en/') !== -1;
+    return root + (isEn ? 'en/index.html' : 'index.html');
+  }
+
+  function fixLogoLinks() {
+    var home = homePageUrl();
+
+    document.querySelectorAll(
+      '.elementor-element-9c49ce4 a, .elementor-element-e1771f2 a, .elementor-element-7ab684f3 a'
+    ).forEach(function (a) {
+      a.setAttribute('href', home);
+      a.removeAttribute('target');
+    });
+
+    document.querySelectorAll('.elementor-location-header a, #colophon a').forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      var img = a.querySelector('img');
+      var isLogo = img && (
+        (img.getAttribute('src') || '').indexOf('Adsiz-200') !== -1 ||
+        img.classList.contains('wp-image-11877')
+      );
+      if (isLogo || /kizilagacinsaat\.com/i.test(href)) {
+        a.setAttribute('href', home);
+        a.removeAttribute('target');
+      }
+    });
+  }
+
   function injectFooterInstagram() {
     var footer = document.getElementById('colophon');
     if (!footer) return;
@@ -581,7 +611,7 @@
     });
 
     footer.querySelectorAll('.elementor-element-48d6ff42 a[href="#"]').forEach(function (a) {
-      a.setAttribute('href', root + 'index.html');
+      a.setAttribute('href', homePageUrl());
     });
 
     footer.querySelectorAll('.elementor-element-1ed1b81d a.__cf_email__').forEach(function (a) {
@@ -590,10 +620,8 @@
     });
 
     footer.querySelectorAll('.elementor-element-7ab684f3 a').forEach(function (a) {
-      var href = a.getAttribute('href') || '';
-      if (href.indexOf('anasayfa') !== -1 || href.indexOf('kizilagacinsaat.com') !== -1) {
-        a.setAttribute('href', root + 'index.html');
-      }
+      a.setAttribute('href', homePageUrl());
+      a.removeAttribute('target');
     });
 
     footer.querySelectorAll('.elementor-element-7ab684f3 img').forEach(function (img) {
@@ -619,6 +647,7 @@
     });
 
     injectFooterInstagram();
+    fixLogoLinks();
 
     var showFooterCols = window.matchMedia('(min-width: 768px)').matches;
     footer.querySelectorAll('.elementor-element-48d6ff42, .elementor-element-1ed1b81d').forEach(function (col) {
@@ -657,6 +686,8 @@
     if (bar.offsetHeight > 32) {
       syncHeaderHeight();
     }
+
+    fixLogoLinks();
 
     var root = siteRootPrefix();
     bar.querySelectorAll('.elementor-element-e1771f2 img').forEach(function (img) {
@@ -727,6 +758,8 @@
   }
 
   function fixHeader() {
+    fixLogoLinks();
+
     document.querySelectorAll('.elementor-10968 .main-navigation .primary-navigation').forEach(function (nav) {
       nav.style.setProperty('display', 'block', 'important');
     });
