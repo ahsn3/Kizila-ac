@@ -30,6 +30,8 @@ html:not(.kiz-ready) sr7-module{background:#111}
 </style>
 """
 
+HERO_PRELOAD = '<link rel="preload" as="image" href="{prefix}hero-background/hero-living.webp" fetchpriority="high" type="image/webp" />\n'
+
 
 def depth_rel(from_dir):
     depth = len(from_dir.relative_to(ROOT).parts)
@@ -236,6 +238,18 @@ def patch_file(fpath):
         text = text[:insert_at] + BOOT_STYLE + text[insert_at:]
     elif "</head>" in text:
         text = text.replace("</head>", BOOT_STYLE + "</head>", 1)
+
+    is_home = fpath.name == "index.html" and fpath.parent in (ROOT, ROOT / "en")
+    hero_preload = HERO_PRELOAD.format(prefix=prefix)
+    if is_home:
+        text = re.sub(
+            r'<link rel="preload" as="image" href="[^"]*hero-background/hero-living\.webp"[^>]*/>\s*',
+            "",
+            text,
+            flags=re.I,
+        )
+        if hero_preload.strip() not in text and "</head>" in text:
+            text = text.replace("</head>", hero_preload + "</head>", 1)
 
     if f'href="{css_rel}"' not in text.split("</head>")[0] and "</head>" in text:
         text = text.replace("</head>", css_tag + "</head>", 1)

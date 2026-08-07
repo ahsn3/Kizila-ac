@@ -84,6 +84,8 @@
         if (active) resetTextMotion(slide);
       });
       updateBullets(index);
+      preloadHeroSlideIndex(index);
+      preloadHeroSlideIndex(index + 1);
     }
 
     function goTo(index, userTriggered) {
@@ -182,10 +184,26 @@
   }
 
   var HERO_BG = {
+    living: 'hero-background/hero-living.webp',
+    kitchen: 'hero-background/hero-kitchen.webp',
+    architecture: 'hero-background/hero-architecture.webp'
+  };
+
+  var HERO_BG_FALLBACK = {
     living: 'hero-background/hero-living.png',
     kitchen: 'hero-background/hero-kitchen.png',
     architecture: 'hero-background/hero-architecture.png'
   };
+
+  var HERO_BG_ELEMENTS = {
+    living: 'SR7_1_1-3-12',
+    kitchen: 'SR7_1_1-1-15',
+    architecture: 'SR7_1_1-6-17'
+  };
+
+  var HERO_SLIDE_KEYS = ['living', 'kitchen', 'architecture'];
+  var heroBgCache = {};
+  var heroBgLoading = {};
 
   var SERVICE_PHOTOS = {
     'mimarlik-hizmetleri': 'architecture-services.png',
@@ -321,8 +339,8 @@
     });
   }
 
-  function heroBgUrl(key) {
-    var path = HERO_BG[key];
+  function heroBgUrl(key, useFallback) {
+    var path = (useFallback ? HERO_BG_FALLBACK : HERO_BG)[key];
     if (!path) return '';
     return siteRootPrefix() + path;
   }
@@ -335,25 +353,81 @@
     el.style.setProperty('background-repeat', 'no-repeat', 'important');
   }
 
-  function applyModernHeroBackgrounds() {
-    if (!document.body.classList.contains('home')) return;
+  function applyHeroBackground(key, url) {
+    var el = document.getElementById(HERO_BG_ELEMENTS[key]);
+    if (!el || !url) return;
+    setBgImage(el, url);
+    el.querySelectorAll('img').forEach(function (img) {
+      img.style.setProperty('display', 'none', 'important');
+    });
+  }
 
-    var map = {
-      'SR7_1_1-3-12': 'living',
-      'SR7_1_1-1-15': 'kitchen',
-      'SR7_1_1-6-17': 'architecture'
-    };
+  function preloadHeroBackground(key, done) {
+    if (heroBgCache[key]) {
+      if (done) done(heroBgCache[key]);
+      return;
+    }
+    if (heroBgLoading[key]) {
+      if (done) heroBgLoading[key].push(done);
+      return;
+    }
 
-    Object.keys(map).forEach(function (id) {
-      var bg = document.getElementById(id);
-      if (!bg) return;
-      var url = heroBgUrl(map[id]);
-      if (!url) return;
-      setBgImage(bg, url);
-      bg.querySelectorAll('img').forEach(function (img) {
-        img.style.setProperty('display', 'none', 'important');
+    heroBgLoading[key] = done ? [done] : [];
+
+    function finish(url) {
+      heroBgCache[key] = url;
+      var waiting = heroBgLoading[key] || [];
+      heroBgLoading[key] = null;
+      applyHeroBackground(key, url);
+      waiting.forEach(function (cb) {
+        if (cb) cb(url);
+      });
+    }
+
+    function tryLoad(url, onFail) {
+      if (!url) {
+        if (onFail) onFail();
+        return;
+      }
+      var img = new Image();
+      img.decoding = 'async';
+      img.onload = function () {
+        finish(url);
+      };
+      img.onerror = function () {
+        if (onFail) onFail();
+      };
+      img.src = url;
+    }
+
+    tryLoad(heroBgUrl(key, false), function () {
+      tryLoad(heroBgUrl(key, true), function () {
+        heroBgLoading[key] = null;
       });
     });
+  }
+
+  function preloadHeroSlideIndex(index) {
+    var key = HERO_SLIDE_KEYS[(index + HERO_SLIDE_KEYS.length) % HERO_SLIDE_KEYS.length];
+    preloadHeroBackground(key);
+  }
+
+  function scheduleIdleHeroPreloads() {
+    var run = function () {
+      preloadHeroBackground('kitchen');
+      preloadHeroBackground('architecture');
+    };
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(run, { timeout: 1200 });
+    } else {
+      window.setTimeout(run, 300);
+    }
+  }
+
+  function applyModernHeroBackgrounds() {
+    if (!document.body.classList.contains('home')) return;
+    preloadHeroBackground('living');
+    scheduleIdleHeroPreloads();
   }
 
   function injectHomeHeroCtas() {
@@ -1501,7 +1575,12 @@
   }
 
   function initPageReveal() {
-    window.setTimeout(revealPage, 2200);
+    if (document.body.classList.contains('home')) {
+      preloadHeroBackground('living', revealPage);
+      window.setTimeout(revealPage, 1600);
+      return;
+    }
+    window.setTimeout(revealPage, 600);
   }
 
   function init() {
