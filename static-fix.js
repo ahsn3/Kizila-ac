@@ -884,6 +884,23 @@
     });
   }
 
+  var pageRevealed = false;
+
+  function revealPage() {
+    if (pageRevealed) return;
+    pageRevealed = true;
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        document.documentElement.classList.add('kiz-ready');
+      });
+    });
+  }
+
+  function initPageReveal() {
+    window.setTimeout(revealPage, 2200);
+  }
+
   function init() {
     disableStickySpacers();
     applySiteHeader();
@@ -907,7 +924,10 @@
     fixWhatsAppButton();
     fixMobileHeader();
     removeScrollToTop();
+    revealPage();
   }
+
+  initPageReveal();
 
   window.addEventListener('resize', function () {
     applySiteHeader();
@@ -935,6 +955,7 @@
     fixWhatsAppButton();
     fixMobileHeader();
     removeScrollToTop();
+    revealPage();
     window.setTimeout(initMobileMenu, 300);
     window.setTimeout(initDesktopDropdowns, 300);
     window.setTimeout(fixPageScroll, 250);
@@ -950,6 +971,7 @@
       fixMobileHeader();
       fixPageScroll();
       syncHeaderHeight();
+      revealPage();
     }, 1000);
   });
 

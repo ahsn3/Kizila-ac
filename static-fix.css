@@ -1,5 +1,50 @@
 /* Static site fixes for Kızılağaç İnşaat clone */
 
+/* ---- Page load fade (paired with kiz-boot-css in head) ---- */
+html:not(.kiz-ready) {
+  background-color: #f2f0eb;
+}
+
+html:not(.kiz-ready) body.home {
+  background-color: #111;
+}
+
+html:not(.kiz-ready) body {
+  overflow: hidden;
+}
+
+html:not(.kiz-ready) #page {
+  opacity: 0;
+  visibility: hidden;
+}
+
+html.kiz-ready #page {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.5s ease;
+}
+
+html.kiz-ready body {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+html:not(.kiz-ready) sr7-slide {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html:not(.kiz-ready) sr7-module {
+  background: #111;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.kiz-ready #page {
+    transition: none;
+  }
+}
+
 /* ---- Overlays ---- */
 .site-search-popup-overlay,
 .site-search-popup:not(.active) {

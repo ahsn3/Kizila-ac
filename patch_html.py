@@ -18,6 +18,18 @@ DEFAULT_DESC_EN = (
 LEGACY_DESC = "Tasarım, Veri, Koordinasyon, Bütünlük"
 LEGACY_DESC_EN = "Design, Data, Coordination, Integrity"
 
+BOOT_STYLE = """<style id="kiz-boot-css">/* kiz-boot v2 */
+html:not(.kiz-ready){background-color:#f2f0eb}
+html:not(.kiz-ready) body.home{background-color:#111}
+html:not(.kiz-ready) body{overflow:hidden}
+html:not(.kiz-ready) #page{opacity:0;visibility:hidden}
+html.kiz-ready #page{opacity:1;visibility:visible;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility .5s ease}
+html:not(.kiz-ready) sr7-slide{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+html:not(.kiz-ready) sr7-module{background:#111}
+@media (prefers-reduced-motion:reduce){html.kiz-ready #page{transition:none}}
+</style>
+"""
+
 
 def depth_rel(from_dir):
     depth = len(from_dir.relative_to(ROOT).parts)
@@ -196,22 +208,49 @@ def patch_file(fpath):
     text = text.replace('"//kizilagacinsaat.com/wp-content/plugins/revslider/', '"wp-content/plugins/revslider/')
     text = text.replace('"\\/\\/kizilagacinsaat.com\\/wp-content\\/plugins\\/revslider/', '"wp-content/plugins/revslider/')
 
-    # Remove duplicate static-fix tags and corrupted trailing markup
-    text = re.sub(r'(<script src="[^"]*static-fix\.js"></script>\s*)+', '', text)
-    text = re.sub(
-        r'</body>\s*</html>\s*(?:<script[^>]*static-fix\.js[^>]*>\s*</script>\s*</body>\s*</html>\s*)+',
-        '</body>\n</html>\n',
-        text,
-        flags=re.I,
-    )
+    text = re.sub(r'<style id="kiz-boot-css">.*?</style>\s*', '', text, flags=re.S)
+    text = re.sub(r'<link[^>]*href=["\'][^"\']*static-fix\.css["\'][^>]*>\s*', "", text, flags=re.I)
+    text = re.sub(r'<link[^>]*href=["\'][^"\']*modern-design\.css["\'][^>]*>\s*', "", text, flags=re.I)
 
     rel = depth_rel(fpath.parent)
     css_rel = rel.replace("static-fix.js", "static-fix.css")
     modern_css_rel = rel.replace("static-fix.js", "modern-design.css")
     prefix = wp_prefix(fpath.parent)
 
-    text = re.sub(r'<link[^>]*href=["\'][^"\']*static-fix\.css["\'][^>]*>\s*', "", text, flags=re.I)
-    text = re.sub(r'<link[^>]*href=["\'][^"\']*modern-design\.css["\'][^>]*>\s*', "", text, flags=re.I)
+    css_tag = (
+        f'<link rel="stylesheet" href="{css_rel}" />\n'
+        f'<link rel="stylesheet" href="{modern_css_rel}" />\n'
+    )
+    js_tag = f'<script src="{rel}"></script>\n'
+
+    viewport_match = re.search(
+        r'(<meta name="viewport"[^>]*>\s*)',
+        text,
+        flags=re.I,
+    )
+    if viewport_match:
+        insert_at = viewport_match.end()
+        text = text[:insert_at] + BOOT_STYLE + text[insert_at:]
+    elif "</head>" in text:
+        text = text.replace("</head>", BOOT_STYLE + "</head>", 1)
+
+    if f'href="{css_rel}"' not in text.split("</head>")[0] and "</head>" in text:
+        text = text.replace("</head>", css_tag + "</head>", 1)
+
+    text = re.sub(rf'{re.escape(css_tag)}(?=<script src="{re.escape(rel)}"></script>)', '', text)
+    text = re.sub(r'(<script src="[^"]*static-fix\.js"></script>\s*)+', '', text)
+
+    if f'src="{rel}"' not in text and "</body>" in text:
+        text = text.replace("</body>", js_tag + "</body>", 1)
+    elif f'src="{rel}"' not in text:
+        text = text + js_tag
+
+    text = re.sub(
+        r'</body>\s*</html>\s*(?:<script[^>]*static-fix\.js[^>]*>\s*</script>\s*</body>\s*</html>\s*)+',
+        '</body>\n</html>\n',
+        text,
+        flags=re.I,
+    )
 
     if ('id="colophon"' in text or "id='colophon'" in text) and "post-46.css" not in text:
         post46 = (
@@ -220,22 +259,6 @@ def patch_file(fpath):
         )
         if "</head>" in text:
             text = text.replace("</head>", f"{post46}\n</head>", 1)
-
-    css_tag = (
-        f'<link rel="stylesheet" href="{css_rel}" />\n'
-        f'<link rel="stylesheet" href="{modern_css_rel}" />\n'
-    )
-    js_tag = f'<script src="{rel}"></script>\n'
-
-    if f'src="{rel}"' in text:
-        text = re.sub(
-            rf'(<script src="{re.escape(rel)}"></script>)',
-            css_tag + r"\1",
-            text,
-            count=1,
-        )
-    elif "</body>" in text:
-        text = text.replace("</body>", css_tag + js_tag + "</body>", 1)
 
     text = patch_meta_tags(text, fpath)
 
