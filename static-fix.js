@@ -503,9 +503,22 @@
       btn.dataset.kizMobileBound = '1';
       btn.addEventListener('click', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         toggleMobileNav();
       });
     });
+
+    if (!document.documentElement.dataset.kizMobileCaptureBound) {
+      document.documentElement.dataset.kizMobileCaptureBound = '1';
+      document.addEventListener('click', function (e) {
+        if (!window.matchMedia('(max-width: 767px)').matches) return;
+        var btn = e.target.closest('.menu-mobile-nav-button');
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMobileNav();
+      }, true);
+    }
 
     document.querySelectorAll('.antra-overlay, .mobile-nav-close').forEach(function (el) {
       if (el.dataset.kizMobileBound) return;
@@ -896,7 +909,8 @@
     header.style.setProperty('left', '0', 'important');
     header.style.setProperty('right', '0', 'important');
     header.style.setProperty('width', '100%', 'important');
-    header.style.setProperty('z-index', '1000', 'important');
+    header.style.setProperty('z-index', '10050', 'important');
+    header.style.setProperty('pointer-events', 'auto', 'important');
     header.style.setProperty('margin', '0', 'important');
     header.style.setProperty('padding', '0', 'important');
     header.style.setProperty('height', 'auto', 'important');
@@ -1056,6 +1070,32 @@
     });
   }
 
+  function injectFooterIcons(footer) {
+    var iconMap = {
+      'icon-map-marker1': CONTACT_ICONS.address,
+      'icon-phone-call1': CONTACT_ICONS.phone,
+      'icon-envelope2': CONTACT_ICONS.email
+    };
+
+    footer.querySelectorAll('.elementskit-info-box-icon').forEach(function (wrap) {
+      if (wrap.querySelector('.kiz-footer-icon')) return;
+
+      var iconEl = wrap.querySelector('i[class*="icon-"]');
+      if (!iconEl) return;
+
+      var cls = (iconEl.className || '').split(/\s+/).filter(function (c) {
+        return iconMap[c];
+      })[0];
+      if (!cls) return;
+
+      iconEl.style.setProperty('display', 'none', 'important');
+      var span = document.createElement('span');
+      span.className = 'kiz-footer-icon';
+      span.innerHTML = iconMap[cls];
+      wrap.appendChild(span);
+    });
+  }
+
   function injectFooterInstagram() {
     var footer = document.getElementById('colophon');
     if (!footer) return;
@@ -1159,6 +1199,7 @@
     });
 
     injectFooterInstagram();
+    injectFooterIcons(footer);
     fixLogoLinks();
 
     var showFooterCols = window.matchMedia('(min-width: 768px)').matches;
