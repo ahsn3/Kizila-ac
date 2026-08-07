@@ -22,7 +22,6 @@ html {
 html,
 body {
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none;
 }
 
 #content,
@@ -30,16 +29,31 @@ body {
   transform: none;
 }
 
-html,
-body {
+/* Single document scroll — html scrolls, body grows; no nested scroll traps */
+html {
   overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   height: auto !important;
 }
 
-#page {
+body {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: 100% !important;
+}
+
+#page,
+#content,
+.site-content,
+#content .col-full,
+#primary,
+.site-main,
+.entry-content,
+.elementor-page {
   overflow: visible !important;
-  min-height: 0 !important;
+  max-height: none !important;
+  height: auto !important;
 }
 
 .ekit-sticky-spacer {
@@ -47,6 +61,18 @@ body {
   height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* ElementsKit sticky header conflicts with our fixed header on inner pages */
+body:not(.home) .ekit-sticky--top {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+}
+
+body:not(.home) .ekit-sticky--top.ekit-sticky-active {
+  position: relative !important;
 }
 
 html.lenis,
@@ -58,24 +84,30 @@ html.lenis.lenis-smooth {
   scroll-behavior: auto;
 }
 
-/* Remove theme red scrollbar track */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-.antra::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+/* Subtle page scrollbar (was fully hidden — made page scroll feel broken) */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(28, 28, 29, 0.35) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
   background: transparent;
 }
 
-html,
-body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+html::-webkit-scrollbar-thumb {
+  background: rgba(28, 28, 29, 0.35);
+  border-radius: 999px;
 }
 
-.antra::-webkit-scrollbar-track {
-  background: transparent !important;
-  box-shadow: none !important;
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body {
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
 }
 
 /* Disable heavy parallax on static hosting */
@@ -893,6 +925,15 @@ body:not(.home) .elementor-element-12b6bd6,
 body:not(.home) .elementor-element-f969415,
 body:not(.home) .elementor-element-4a935a {
   margin-top: 0 !important;
+}
+
+/* Hizmetler / İletişim: prevent accordion widget from creating a clipped scroll box */
+.elementor-widget-antra-services-accordion .elementor-widget-container,
+.elementor-widget-antra-services-accordion .antra-service-wrapper,
+.elementor-widget-antra-services-accordion .antra-service-side-titles {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 @media (min-width: 1025px) {

@@ -213,7 +213,48 @@
     });
     document.querySelectorAll('.ekit-sticky--top').forEach(function (el) {
       el.classList.remove('ekit-sticky-active', 'ekit-sticky-effects');
+      el.style.setProperty('position', 'relative', 'important');
+      el.style.setProperty('top', 'auto', 'important');
+      el.style.setProperty('bottom', 'auto', 'important');
+      el.style.setProperty('width', 'auto', 'important');
     });
+  }
+
+  function fixPageScroll() {
+    document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-scrolling', 'lenis-stopped');
+    document.documentElement.style.setProperty('overflow-x', 'hidden', 'important');
+    document.documentElement.style.setProperty('overflow-y', 'scroll', 'important');
+    document.documentElement.style.setProperty('height', 'auto', 'important');
+    document.body.style.setProperty('overflow-x', 'hidden', 'important');
+    document.body.style.setProperty('overflow-y', 'visible', 'important');
+    document.body.style.setProperty('height', 'auto', 'important');
+
+    var scrollRoots = [
+      '#page',
+      '#content',
+      '.site-content',
+      '#content .col-full',
+      '#primary',
+      '.site-main',
+      '.entry-content',
+      '.elementor-page'
+    ];
+
+    scrollRoots.forEach(function (selector) {
+      document.querySelectorAll(selector).forEach(function (el) {
+        el.style.setProperty('overflow', 'visible', 'important');
+        el.style.setProperty('max-height', 'none', 'important');
+        el.style.setProperty('height', 'auto', 'important');
+      });
+    });
+
+    document.querySelectorAll('.elementor-widget-antra-services-accordion .elementor-widget-container').forEach(function (el) {
+      el.style.setProperty('height', 'auto', 'important');
+      el.style.setProperty('max-height', 'none', 'important');
+      el.style.setProperty('overflow', 'visible', 'important');
+    });
+
+    disableStickySpacers();
   }
 
   function disableMotionEffects() {
@@ -374,6 +415,7 @@
 
   function init() {
     disableStickySpacers();
+    fixPageScroll();
     fixHeroBackgrounds();
     initAllHeroSliders();
     disableJarallax();
@@ -388,6 +430,7 @@
 
   window.addEventListener('load', function () {
     disableStickySpacers();
+    fixPageScroll();
     disableLenisScroll();
     disableJarallax();
     disableMotionEffects();
@@ -396,6 +439,8 @@
     fixInnerPageHeroes();
     fixFooter();
     removeScrollToTop();
+    window.setTimeout(fixPageScroll, 250);
+    window.setTimeout(fixPageScroll, 1000);
   });
 
   /* Removed per-scroll disableMotionEffects — it caused hero lag on inner pages */
