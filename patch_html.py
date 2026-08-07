@@ -5,6 +5,18 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).parent.resolve()
+SITE_URL = "https://kizilagac.netlify.app"
+OG_IMAGE = f"{SITE_URL}/og-share.jpg"
+DEFAULT_DESC_TR = (
+    "Kızılağaç İnşaat — uzun yıllara dayanan tecrübemizle İstanbul'da güvenilir, "
+    "kaliteli ve anahtar teslim inşaat hizmetleri sunuyoruz."
+)
+DEFAULT_DESC_EN = (
+    "Kızılağaç Construction — trusted turnkey residential and commercial "
+    "building services in Istanbul with decades of experience."
+)
+LEGACY_DESC = "Tasarım, Veri, Koordinasyon, Bütünlük"
+LEGACY_DESC_EN = "Design, Data, Coordination, Integrity"
 
 
 def depth_rel(from_dir):
@@ -31,6 +43,142 @@ def fix_slider_noscript(text):
         repl,
         text,
     )
+    return text
+
+
+def is_en_page(fpath: Path) -> bool:
+    rel = fpath.relative_to(ROOT)
+    return bool(rel.parts) and rel.parts[0] == "en"
+
+
+def page_public_url(fpath: Path) -> str:
+    rel = fpath.relative_to(ROOT)
+    parts = list(rel.parts)
+    if parts and parts[-1] == "index.html":
+        parts.pop()
+    path = "/".join(parts)
+    if path:
+        return f"{SITE_URL}/{path}/"
+    return f"{SITE_URL}/"
+
+
+def abs_media_url(url: str) -> str:
+    url = url.strip()
+    url = re.sub(r"https?://kizilagacinsaat\.com", SITE_URL, url)
+    if url.startswith("//"):
+        url = "https:" + url
+    if url.startswith("/"):
+        return SITE_URL + url
+    if url.startswith("wp-content/") or url.startswith("../wp-content/"):
+        url = re.sub(r"^(\.\./)+", "", url)
+        return f"{SITE_URL}/{url}"
+    return url
+
+
+def upsert_meta_property(text: str, prop: str, content: str) -> str:
+    tag = f'<meta property="{prop}" content="{content}" />'
+    pattern = rf'<meta property="{re.escape(prop)}" content="[^"]*"[^>]*/>\s*'
+    if re.search(pattern, text, flags=re.I):
+        return re.sub(pattern, tag + "\n", text, count=1, flags=re.I)
+    insert_after = re.search(r"<title>[^<]*</title>\s*", text, flags=re.I)
+    if insert_after:
+        idx = insert_after.end()
+        return text[:idx] + tag + "\n" + text[idx:]
+    return text.replace("<head>", f"<head>\n{tag}", 1)
+
+
+def upsert_meta_name(text: str, name: str, content: str) -> str:
+    tag = f'<meta name="{name}" content="{content}" />'
+    pattern = rf'<meta name="{re.escape(name)}" content="[^"]*"[^>]*/>\s*'
+    if re.search(pattern, text, flags=re.I):
+        return re.sub(pattern, tag + "\n", text, count=1, flags=re.I)
+    insert_after = re.search(r'<meta name="description" content="[^"]*"[^>]*/>\s*', text, flags=re.I)
+    if insert_after:
+        idx = insert_after.end()
+        return text[:idx] + tag + "\n" + text[idx:]
+    insert_after = re.search(r"<title>[^<]*</title>\s*", text, flags=re.I)
+    if insert_after:
+        idx = insert_after.end()
+        return text[:idx] + tag + "\n" + text[idx:]
+    return text.replace("<head>", f"<head>\n{tag}", 1)
+
+
+def extract_title(text: str) -> str:
+    match = re.search(r"<title>([^<]+)</title>", text, flags=re.I)
+    return match.group(1).strip() if match else "Kızılağaç İnşaat"
+
+
+def pick_description(text: str, fpath: Path, is_en: bool) -> str:
+    if fpath in {ROOT / "index.html", ROOT / "en/index.html"}:
+        return DEFAULT_DESC_EN if is_en else DEFAULT_DESC_TR
+
+    legacy = {LEGACY_DESC, LEGACY_DESC_EN}
+    for pattern in (
+        r'<meta property="og:description" content="([^"]*)"',
+        r'<meta name="description" content="([^"]*)"',
+        r'<meta name="twitter:description" content="([^"]*)"',
+    ):
+        match = re.search(pattern, text, flags=re.I)
+        if match:
+            desc = match.group(1).strip()
+            if desc and desc not in legacy and len(desc) > 20:
+                return desc
+    title = extract_title(text)
+    clean = re.sub(r"\s*-\s*Kızılağaç (İnşaat|Construction)\s*$", "", title, flags=re.I)
+    if clean and clean != title:
+        return clean
+    return DEFAULT_DESC_EN if is_en else DEFAULT_DESC_TR
+
+
+def pick_og_title(text: str, fpath: Path, is_en: bool) -> str:
+    if fpath == ROOT / "index.html":
+        return "Kızılağaç İnşaat"
+    if fpath == ROOT / "en/index.html":
+        return "Kızılağaç Construction"
+    title = extract_title(text)
+    return title.replace(" - Kızılağaç İnşaat", "").replace(" - Kızılağaç Construction", "").strip() or title
+
+
+def pick_og_image(text: str) -> str:
+    match = re.search(r'<meta property="og:image" content="([^"]+)"', text, flags=re.I)
+    if match:
+        url = abs_media_url(match.group(1))
+        if "gravatar.com" not in url and "secure.gravatar" not in url:
+            return url
+    return OG_IMAGE
+
+
+def patch_meta_tags(text: str, fpath: Path) -> str:
+    if "<html" not in text.lower():
+        return text
+
+    en = is_en_page(fpath)
+    og_title = pick_og_title(text, fpath, en)
+    desc = pick_description(text, fpath, en)
+    og_image = pick_og_image(text)
+    public_url = page_public_url(fpath)
+
+    text = re.sub(r'<meta name="twitter:label\d+"[^>]*>\s*', "", text, flags=re.I)
+    text = re.sub(r'<meta name="twitter:data\d+"[^>]*>\s*', "", text, flags=re.I)
+
+    text = upsert_meta_name(text, "description", desc)
+    text = upsert_meta_property(text, "og:locale", "en_US" if en else "tr_TR")
+    text = upsert_meta_property(text, "og:type", "website")
+    text = upsert_meta_property(text, "og:title", og_title)
+    text = upsert_meta_property(text, "og:description", desc)
+    text = upsert_meta_property(text, "og:url", public_url)
+    text = upsert_meta_property(text, "og:site_name", "Kızılağaç Construction" if en else "Kızılağaç İnşaat")
+    text = upsert_meta_property(text, "og:image", og_image)
+    text = upsert_meta_property(text, "og:image:secure_url", og_image)
+    text = upsert_meta_property(text, "og:image:width", "1200")
+    text = upsert_meta_property(text, "og:image:height", "630")
+    text = upsert_meta_property(text, "og:image:alt", og_title)
+
+    text = upsert_meta_name(text, "twitter:card", "summary_large_image")
+    text = upsert_meta_name(text, "twitter:title", og_title)
+    text = upsert_meta_name(text, "twitter:description", desc)
+    text = upsert_meta_name(text, "twitter:image", og_image)
+
     return text
 
 
@@ -83,6 +231,8 @@ def patch_file(fpath):
         )
     elif "</body>" in text:
         text = text.replace("</body>", css_tag + js_tag + "</body>", 1)
+
+    text = patch_meta_tags(text, fpath)
 
     if text != orig:
         fpath.write_text(text, encoding="utf-8")
