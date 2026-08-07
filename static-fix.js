@@ -184,7 +184,7 @@
   var HERO_BG = {
     living: 'hero-background/hero-living.png',
     kitchen: 'hero-background/hero-kitchen.png',
-    architecture: 'hero-background/Mimarlık Hizmetleri.png'
+    architecture: 'hero-background/hero-architecture.png'
   };
 
   var SERVICE_PHOTOS = {
@@ -322,7 +322,9 @@
   }
 
   function heroBgUrl(key) {
-    return siteRootPrefix() + HERO_BG[key];
+    var path = HERO_BG[key];
+    if (!path) return '';
+    return siteRootPrefix() + path;
   }
 
   function setBgImage(el, url) {
@@ -339,17 +341,18 @@
     var map = {
       'SR7_1_1-3-12': 'living',
       'SR7_1_1-1-15': 'kitchen',
-      'SR7_1_1-6-17': 'bedroom'
+      'SR7_1_1-6-17': 'architecture'
     };
 
     Object.keys(map).forEach(function (id) {
       var bg = document.getElementById(id);
-      if (bg) {
-        setBgImage(bg, heroBgUrl(map[id]));
-        bg.querySelectorAll('img').forEach(function (img) {
-          img.style.setProperty('display', 'none', 'important');
-        });
-      }
+      if (!bg) return;
+      var url = heroBgUrl(map[id]);
+      if (!url) return;
+      setBgImage(bg, url);
+      bg.querySelectorAll('img').forEach(function (img) {
+        img.style.setProperty('display', 'none', 'important');
+      });
     });
   }
 
