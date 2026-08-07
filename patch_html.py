@@ -207,9 +207,11 @@ def patch_file(fpath):
 
     rel = depth_rel(fpath.parent)
     css_rel = rel.replace("static-fix.js", "static-fix.css")
+    modern_css_rel = rel.replace("static-fix.js", "modern-design.css")
     prefix = wp_prefix(fpath.parent)
 
     text = re.sub(r'<link[^>]*href=["\'][^"\']*static-fix\.css["\'][^>]*>\s*', "", text, flags=re.I)
+    text = re.sub(r'<link[^>]*href=["\'][^"\']*modern-design\.css["\'][^>]*>\s*', "", text, flags=re.I)
 
     if ('id="colophon"' in text or "id='colophon'" in text) and "post-46.css" not in text:
         post46 = (
@@ -219,7 +221,10 @@ def patch_file(fpath):
         if "</head>" in text:
             text = text.replace("</head>", f"{post46}\n</head>", 1)
 
-    css_tag = f'<link rel="stylesheet" href="{css_rel}" />\n'
+    css_tag = (
+        f'<link rel="stylesheet" href="{css_rel}" />\n'
+        f'<link rel="stylesheet" href="{modern_css_rel}" />\n'
+    )
     js_tag = f'<script src="{rel}"></script>\n'
 
     if f'src="{rel}"' in text:

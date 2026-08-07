@@ -145,6 +145,84 @@
     });
   }
 
+  var HERO_BG = {
+    living: 'hero-background/hero-living.png',
+    kitchen: 'hero-background/hero-kitchen.png',
+    bedroom: 'hero-background/hero-bedroom.png'
+  };
+
+  function heroBgUrl(key) {
+    return siteRootPrefix() + HERO_BG[key];
+  }
+
+  function setBgImage(el, url) {
+    if (!el || !url) return;
+    el.style.setProperty('background-image', 'url("' + url + '")', 'important');
+    el.style.setProperty('background-size', 'cover', 'important');
+    el.style.setProperty('background-position', 'center', 'important');
+    el.style.setProperty('background-repeat', 'no-repeat', 'important');
+  }
+
+  function applyModernHeroBackgrounds() {
+    var map = {
+      'SR7_1_1-3-12': 'living',
+      'SR7_1_1-1-15': 'kitchen',
+      'SR7_1_1-6-17': 'bedroom'
+    };
+
+    Object.keys(map).forEach(function (id) {
+      var bg = document.getElementById(id);
+      if (bg) {
+        setBgImage(bg, heroBgUrl(map[id]));
+        bg.querySelectorAll('img').forEach(function (img) {
+          img.style.setProperty('display', 'none', 'important');
+        });
+      }
+    });
+  }
+
+  function injectHomeHeroCtas() {
+    if (!document.body.classList.contains('home')) return;
+    var module = document.getElementById('SR7_1_1');
+    if (!module || module.querySelector('.kiz-hero-actions')) return;
+
+    var slide = document.getElementById('SR7_1_1-3');
+    if (!slide) return;
+
+    var root = siteRootPrefix();
+    var isEn = (window.location.pathname || '').indexOf('/en/') !== -1;
+    var wrap = document.createElement('div');
+    wrap.className = 'kiz-hero-actions';
+
+    var primary = document.createElement('a');
+    primary.className = 'kiz-hero-cta kiz-hero-cta--primary';
+    primary.href = root + (isEn ? 'projects/index.html' : 'projeler/index.html');
+    primary.textContent = isEn ? 'Explore Our Projects' : 'Projelerimizi İnceleyin';
+
+    var ghost = document.createElement('a');
+    ghost.className = 'kiz-hero-cta kiz-hero-cta--ghost';
+    ghost.href = root + (isEn ? 'contact/index.html' : 'iletisim/index.html');
+    ghost.textContent = isEn ? 'Contact Us' : 'Bize Ulaşın';
+
+    wrap.appendChild(primary);
+    wrap.appendChild(ghost);
+    slide.appendChild(wrap);
+  }
+
+  function pageHeroImageKey() {
+    var path = (window.location.pathname || '').toLowerCase();
+    if (path.indexOf('projeler') !== -1 || path.indexOf('project') !== -1 || path.indexOf('galeri') !== -1) {
+      return 'living';
+    }
+    if (path.indexOf('hizmet') !== -1 || path.indexOf('service') !== -1 || path.indexOf('mimari') !== -1) {
+      return 'kitchen';
+    }
+    if (path.indexOf('hakk') !== -1 || path.indexOf('about') !== -1 || path.indexOf('vizyon') !== -1 || path.indexOf('ekib') !== -1) {
+      return 'bedroom';
+    }
+    return 'living';
+  }
+
   function disableLenisScroll() {
     if (window.lenisInstance && typeof window.lenisInstance.destroy === 'function') {
       window.lenisInstance.destroy();
@@ -564,8 +642,14 @@
       first.classList.add('kiz-page-hero');
       first.classList.remove('kiz-page-hero-solid');
     } else {
-      first.classList.add('kiz-page-hero-solid');
-      first.classList.remove('kiz-page-hero');
+      setBgImage(first, heroBgUrl(pageHeroImageKey()));
+      first.classList.add('kiz-page-hero');
+      first.classList.remove('kiz-page-hero-solid');
+      hasBg = true;
+    }
+
+    if (hasBg && !first.style.position) {
+      first.style.position = 'relative';
     }
 
     document.querySelectorAll('#content .e-con.e-parent').forEach(function (el, index) {
@@ -603,6 +687,8 @@
     fixHomeHeader();
     fixPageScroll();
     fixHeroBackgrounds();
+    applyModernHeroBackgrounds();
+    injectHomeHeroCtas();
     initAllHeroSliders();
     disableJarallax();
     disableMotionEffects();
@@ -630,6 +716,8 @@
     disableJarallax();
     disableMotionEffects();
     fixHeroBackgrounds();
+    applyModernHeroBackgrounds();
+    injectHomeHeroCtas();
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
