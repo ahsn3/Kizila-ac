@@ -1217,12 +1217,17 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a {
     color: #1c1c1d !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     white-space: nowrap !important;
     padding: 8px 14px !important;
     border-radius: 8px !important;
     transition: color 0.25s ease, background-color 0.25s ease !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a .menu-title {
+    font-size: inherit !important;
+    font-weight: inherit !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a:hover {
@@ -1232,10 +1237,11 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-item > a,
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current_page_item > a,
-  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-ancestor > a {
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-ancestor > a,
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.kiz-nav-active > a {
     color: #a62626 !important;
     background-color: rgba(166, 38, 38, 0.12) !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.menu-item-has-children > a {
@@ -1530,8 +1536,14 @@ body:not(.home) .elementor-10968 .elementor-element-b145162 {
     backdrop-filter var(--kiz-transition);
 }
 
-/* Nav links — modern pill hover/active (no underlines) */
+/* Nav links — unified size/weight on all pages (overrides Elementor header span sizing) */
 @media (min-width: 768px) {
+  .elementor-10968 .main-navigation .menu > li > a,
+  .elementor-10968 .main-navigation .menu > li > a .menu-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+  }
+
   .elementor-10968 .main-navigation .menu > li > a {
     position: relative;
     display: inline-flex !important;
@@ -1579,11 +1591,64 @@ body:not(.home) .elementor-10968 .elementor-element-b145162 {
 
   .elementor-10968 .main-navigation .menu > li.current-menu-item > a,
   .elementor-10968 .main-navigation .menu > li.current_page_item > a,
-  .elementor-10968 .main-navigation .menu > li.current-menu-ancestor > a {
+  .elementor-10968 .main-navigation .menu > li.current-menu-ancestor > a,
+  .elementor-10968 .main-navigation .menu > li.kiz-nav-active > a {
     color: var(--kiz-brand, #a62626) !important;
     background-color: rgba(166, 38, 38, 0.12) !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
   }
+}
+
+/* TR / EN language switcher */
+.elementor-10968 .elementor-element-864fe55 .trp-shortcode-switcher__wrapper,
+.elementor-10968 .elementor-element-7e150df .trp-shortcode-switcher__wrapper {
+  display: none !important;
+}
+
+.kiz-lang-switch {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.kiz-lang-switch .kiz-lang-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 8px !important;
+  border-radius: 8px !important;
+  color: #1c1c1d !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  border: 1px solid rgba(28, 28, 29, 0.1) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+.kiz-lang-switch .kiz-lang-item:hover {
+  color: #a62626 !important;
+  border-color: rgba(166, 38, 38, 0.25) !important;
+  background: rgba(166, 38, 38, 0.08) !important;
+}
+
+.kiz-lang-switch .kiz-lang-item.is-active {
+  color: #a62626 !important;
+  border-color: rgba(166, 38, 38, 0.35) !important;
+  background: rgba(166, 38, 38, 0.12) !important;
+  pointer-events: none;
+}
+
+.kiz-lang-switch .kiz-lang-item img {
+  display: block !important;
+  width: 22px !important;
+  height: 16px !important;
+  object-fit: cover !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 0 1px rgba(28, 28, 29, 0.08);
 }
 
 /* Logo micro-interaction */
@@ -2045,8 +2110,8 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
     border-radius: 8px !important;
     border-bottom: none !important;
     color: #1c1c1d !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     text-decoration: none !important;
     transition: color 0.2s ease, background-color 0.2s ease !important;
   }
@@ -2054,17 +2119,19 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
   .antra-mobile-nav .mobile-navigation ul > li.menu-item > a {
     border-bottom: none !important;
     color: #1c1c1d !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     padding: 12px 44px 12px 14px !important;
   }
 
   .handheld-navigation .menu > li > a:hover,
   .handheld-navigation .menu > li.current-menu-item > a,
-  .handheld-navigation .menu > li.current_page_item > a {
+  .handheld-navigation .menu > li.current_page_item > a,
+  .handheld-navigation .menu > li.kiz-nav-active > a,
+  .handheld-navigation .menu > li.current-menu-ancestor > a {
     color: #a62626 !important;
     background-color: rgba(166, 38, 38, 0.12) !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
   }
 
   .handheld-navigation .sub-menu {

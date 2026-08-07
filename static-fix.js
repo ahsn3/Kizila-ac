@@ -569,6 +569,123 @@
     }
   }
 
+  function markActiveNav() {
+    function normalizeNavPath(pathname) {
+      var path = (pathname || '/').split('?')[0].split('#')[0];
+      if (path.endsWith('/index.html')) path = path.slice(0, -10);
+      if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
+      return path || '/';
+    }
+
+    function resolveNavPath(href) {
+      if (!href || href === '#') return '';
+      try {
+        return normalizeNavPath(new URL(href, window.location.href).pathname);
+      } catch (e) {
+        return normalizeNavPath(href);
+      }
+    }
+
+    function isHomePath(path) {
+      return path === '/' || path === '/en';
+    }
+
+    var currentPath = normalizeNavPath(window.location.pathname);
+    var sectionMatchers = {
+      'menu-item-61': [/^\/projeler(?:\/|$)/, /^\/en\/projects(?:\/|$)/, /^\/project(?:\/|$)/, /^\/en\/project(?:\/|$)/],
+      'menu-item-63': [/^\/hakkimizda(?:\/|$)/, /^\/en\/about-us(?:\/|$)/, /^\/vizyon(?:\/|$)/, /^\/en\/vision(?:\/|$)/, /^\/ekibimiz(?:\/|$)/, /^\/en\/our-team(?:\/|$)/, /^\/galeri(?:\/|$)/, /^\/en\/gallery(?:\/|$)/, /^\/sanal-turlar(?:\/|$)/, /^\/en\/virtual-tours(?:\/|$)/],
+      'menu-item-8967': [/^\/hizmetler(?:\/|$)/, /^\/en\/hizmetler(?:\/|$)/, /^\/en\/services(?:\/|$)/, /^\/service(?:\/|$)/, /^\/en\/service(?:\/|$)/, /^\/mimari-hizmetler(?:\/|$)/, /^\/en\/mimari-hizmetler(?:\/|$)/, /^\/en\/architectural-services(?:\/|$)/]
+    };
+
+    document.querySelectorAll(
+      '.elementor-10968 .main-navigation .menu > li, .antra-mobile-nav .handheld-navigation .menu > li'
+    ).forEach(function (li) {
+      li.classList.remove(
+        'kiz-nav-active',
+        'current-menu-item',
+        'current_page_item',
+        'current-menu-ancestor',
+        'current-menu-parent'
+      );
+
+      var topLink = li.querySelector(':scope > a');
+      if (!topLink) return;
+
+      var topHref = topLink.getAttribute('href') || '';
+      var topPath = resolveNavPath(topHref);
+      var exactTop = topPath && topPath === currentPath && topHref !== '#';
+      var exactSub = false;
+
+      li.querySelectorAll(':scope > .sub-menu > li > a').forEach(function (subLink) {
+        if (resolveNavPath(subLink.getAttribute('href')) === currentPath) {
+          exactSub = true;
+        }
+      });
+
+      var sectionMatch = false;
+      Object.keys(sectionMatchers).some(function (className) {
+        if (!li.classList.contains(className)) return false;
+        return sectionMatchers[className].some(function (pattern) {
+          if (pattern.test(currentPath)) {
+            sectionMatch = true;
+            return true;
+          }
+          return false;
+        });
+      });
+
+      var homeMatch = li.classList.contains('menu-item-home') && isHomePath(currentPath);
+
+      if (exactTop || homeMatch) {
+        li.classList.add('current-menu-item', 'current_page_item', 'kiz-nav-active');
+      } else if (exactSub || sectionMatch) {
+        li.classList.add('current-menu-ancestor', 'current-menu-parent', 'kiz-nav-active');
+      }
+    });
+  }
+
+  function initLanguageSwitcher() {
+    var trHref = '';
+    var enHref = '';
+
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(function (link) {
+      var lang = (link.getAttribute('hreflang') || '').toLowerCase();
+      var href = link.getAttribute('href');
+      if (!href) return;
+
+      try {
+        var resolved = new URL(href, window.location.href).pathname;
+        if (lang.indexOf('tr') === 0 && !trHref) trHref = resolved;
+        if (lang.indexOf('en') === 0 && !enHref) enHref = resolved;
+      } catch (e) {
+        /* ignore malformed hreflang */
+      }
+    });
+
+    var path = window.location.pathname.replace(/\/index\.html$/, '');
+    if (!path) path = '/';
+    var isEn = path === '/en' || path.indexOf('/en/') === 0;
+
+    if (!trHref) trHref = isEn ? '/index.html' : (path === '/' ? '/index.html' : path + '/index.html');
+    if (!enHref) enHref = isEn ? (path === '/en' ? '/en/index.html' : path + '/index.html') : '/en/index.html';
+
+    var flagBase = '/wp-content/plugins/translatepress-multilingual/assets/flags/4x3/';
+    var switcherHtml =
+      '<nav class="kiz-lang-switch" aria-label="Language selector" data-no-translation>' +
+      '<a href="' + trHref + '" class="kiz-lang-item' + (isEn ? '' : ' is-active') + '" title="Türkçe" data-no-translation>' +
+      '<img src="' + flagBase + 'tr_TR.svg" alt="" width="22" height="16" loading="lazy"><span>TR</span></a>' +
+      '<a href="' + enHref + '" class="kiz-lang-item' + (isEn ? ' is-active' : '') + '" title="English" data-no-translation>' +
+      '<img src="' + flagBase + 'en_US.svg" alt="" width="22" height="16" loading="lazy"><span>EN</span></a>' +
+      '</nav>';
+
+    document.querySelectorAll('.elementor-10968 .elementor-element-864fe55, .elementor-10968 .elementor-element-7e150df').forEach(function (widget) {
+      if (widget.querySelector('.kiz-lang-switch')) return;
+
+      var host = widget.querySelector('.elementor-widget-container') || widget;
+      host.innerHTML = switcherHtml;
+    });
+  }
+
   function initDesktopDropdowns() {
     var nav = document.querySelector('.elementor-10968 .main-navigation .menu');
     if (!nav) return;
@@ -1215,6 +1332,8 @@
     initSmoothAnchors();
     initMobileMenu();
     initDesktopDropdowns();
+    markActiveNav();
+    initLanguageSwitcher();
     initProjectGridToggle();
     fixHeader();
     fixInnerPageHeroes();
@@ -1250,6 +1369,8 @@
     fixHeader();
     initMobileMenu();
     initDesktopDropdowns();
+    markActiveNav();
+    initLanguageSwitcher();
     initProjectGridToggle();
     fixInnerPageHeroes();
     fixFooter();
