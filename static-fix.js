@@ -212,12 +212,59 @@
       el.remove();
     });
     document.querySelectorAll('.ekit-sticky--top').forEach(function (el) {
+      if (document.body.classList.contains('home') && el.closest('.elementor-location-header')) {
+        el.classList.remove('ekit-sticky-active', 'ekit-sticky-effects');
+        return;
+      }
       el.classList.remove('ekit-sticky-active', 'ekit-sticky-effects');
       el.style.setProperty('position', 'relative', 'important');
       el.style.setProperty('top', 'auto', 'important');
       el.style.setProperty('bottom', 'auto', 'important');
       el.style.setProperty('width', 'auto', 'important');
     });
+  }
+
+  function fixHomeHeader() {
+    if (!document.body.classList.contains('home')) return;
+
+    var header = document.querySelector('.elementor-location-header');
+    if (header) {
+      header.style.setProperty('position', 'fixed', 'important');
+      header.style.setProperty('top', '0', 'important');
+      header.style.setProperty('left', '0', 'important');
+      header.style.setProperty('right', '0', 'important');
+      header.style.setProperty('width', '100%', 'important');
+      header.style.setProperty('z-index', '1000', 'important');
+      header.style.setProperty('margin', '0', 'important');
+      header.style.setProperty('padding', '0', 'important');
+    }
+
+    ['bf83e51', 'b145162'].forEach(function (id) {
+      var els = header ? header.querySelectorAll('.elementor-element-' + id) : [];
+      els.forEach(function (el, index) {
+        if (index > 0) {
+          el.remove();
+          return;
+        }
+        el.style.setProperty('position', 'relative', 'important');
+        el.style.setProperty('top', 'auto', 'important');
+        el.style.setProperty('left', 'auto', 'important');
+        el.style.setProperty('right', 'auto', 'important');
+        el.style.setProperty('width', '100%', 'important');
+      });
+    });
+
+    var content = document.querySelector('#content.site-content');
+    if (content) {
+      content.style.setProperty('margin-top', '0', 'important');
+      content.style.setProperty('padding-top', '0', 'important');
+    }
+
+    var visibleBar = header && header.querySelector('.elementor-element-bf83e51:not([style*="display: none"])')
+      || header && header.querySelector('.elementor-element-b145162:not([style*="display: none"])');
+    if (visibleBar && visibleBar.offsetHeight > 40) {
+      document.documentElement.style.setProperty('--kiz-header-h', visibleBar.offsetHeight + 'px');
+    }
   }
 
   function fixPageScroll() {
@@ -457,6 +504,7 @@
 
   function init() {
     disableStickySpacers();
+    fixHomeHeader();
     fixPageScroll();
     fixHeroBackgrounds();
     initAllHeroSliders();
@@ -472,6 +520,7 @@
 
   window.addEventListener('load', function () {
     disableStickySpacers();
+    fixHomeHeader();
     fixPageScroll();
     disableLenisScroll();
     disableJarallax();
@@ -482,7 +531,12 @@
     fixFooter();
     removeScrollToTop();
     window.setTimeout(fixPageScroll, 250);
-    window.setTimeout(fixPageScroll, 1000);
+    window.setTimeout(fixHomeHeader, 250);
+    window.setTimeout(function () {
+      disableStickySpacers();
+      fixHomeHeader();
+      fixPageScroll();
+    }, 1000);
   });
 
   /* Removed per-scroll disableMotionEffects — it caused hero lag on inner pages */
