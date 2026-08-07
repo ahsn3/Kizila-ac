@@ -207,6 +207,15 @@
     }
   }
 
+  function disableStickySpacers() {
+    document.querySelectorAll('.ekit-sticky-spacer').forEach(function (el) {
+      el.remove();
+    });
+    document.querySelectorAll('.ekit-sticky--top').forEach(function (el) {
+      el.classList.remove('ekit-sticky-active', 'ekit-sticky-effects');
+    });
+  }
+
   function disableMotionEffects() {
     document.querySelectorAll('.elementor-motion-effects-layer, .elementor-motion-effects-element').forEach(function (el) {
       el.style.setProperty('transform', 'none', 'important');
@@ -215,6 +224,14 @@
     });
     document.querySelectorAll('[data-settings*="motion_fx"]').forEach(function (el) {
       el.style.setProperty('transform', 'none', 'important');
+      el.style.setProperty('transition', 'none', 'important');
+      el.style.setProperty('animation', 'none', 'important');
+    });
+    document.querySelectorAll('.kiz-page-hero, .kiz-page-hero *').forEach(function (el) {
+      el.style.setProperty('transform', 'none', 'important');
+      el.style.setProperty('transition', 'none', 'important');
+      el.style.setProperty('animation', 'none', 'important');
+      el.style.setProperty('will-change', 'auto', 'important');
     });
   }
 
@@ -286,6 +303,14 @@
     if (document.body.classList.contains('home')) return;
 
     var root = siteRootPrefix();
+    var header = document.querySelector('.elementor-location-header');
+    if (header) {
+      var hh = header.offsetHeight;
+      if (hh > 40) {
+        document.documentElement.style.setProperty('--kiz-header-h', hh + 'px');
+      }
+    }
+
     var first = document.querySelector('#content .entry-content > .elementor > .e-con.e-parent');
     if (!first) return;
 
@@ -297,6 +322,9 @@
       if (/kizilagacinsaat\.com/i.test(bg)) {
         el.style.backgroundImage = bg.replace(/https?:\/\/kizilagacinsaat\.com\//gi, root);
       }
+      el.style.backgroundAttachment = 'scroll';
+      el.style.transform = 'none';
+      el.style.willChange = 'auto';
       return /url\(/i.test(getComputedStyle(el).backgroundImage);
     }
 
@@ -308,14 +336,16 @@
 
     if (hasBg) {
       first.classList.add('kiz-page-hero');
+      first.classList.remove('kiz-page-hero-solid');
     } else {
       first.classList.add('kiz-page-hero-solid');
+      first.classList.remove('kiz-page-hero');
     }
 
     document.querySelectorAll('#content .e-con.e-parent').forEach(function (el, index) {
       if (index === 0) return;
       var mt = parseInt(getComputedStyle(el).marginTop, 10);
-      if (mt >= 80) {
+      if (mt >= 60) {
         el.style.setProperty('margin-top', '0', 'important');
       }
       rewriteBg(el);
@@ -337,6 +367,7 @@
   }
 
   function init() {
+    disableStickySpacers();
     fixHeroBackgrounds();
     initAllHeroSliders();
     disableJarallax();
@@ -349,6 +380,7 @@
   }
 
   window.addEventListener('load', function () {
+    disableStickySpacers();
     disableLenisScroll();
     disableJarallax();
     disableMotionEffects();
@@ -358,9 +390,7 @@
     fixFooter();
   });
 
-  window.addEventListener('scroll', function () {
-    disableMotionEffects();
-  }, { passive: true });
+  /* Removed per-scroll disableMotionEffects — it caused hero lag on inner pages */
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

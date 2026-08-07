@@ -26,9 +26,27 @@ body {
 }
 
 #content,
-.site-content,
-.elementor-location-header {
-  transform: translateZ(0);
+.site-content {
+  transform: none;
+}
+
+html,
+body {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+#page {
+  overflow: visible !important;
+  min-height: 0 !important;
+}
+
+.ekit-sticky-spacer {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 html.lenis,
@@ -555,6 +573,18 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 
 #colophon .elementor-element-1ed1b81d .elementskit-infobox {
   padding: 0 0 18px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+#colophon .elementskit-infobox,
+#colophon .ekit-wid-con,
+#colophon .elementor-widget-elementskit-icon-box .elementor-widget-container,
+#colophon .elementskit-box-header {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 #colophon .elementor-element-1ed1b81d .elementskit-info-box-title {
@@ -638,8 +668,11 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 }
 
 /* ---- Site header / navbar (elementor-10968) ---- */
+:root {
+  --kiz-header-h: 72px;
+}
+
 .elementor-location-header {
-  position: relative;
   z-index: 1000 !important;
 }
 
@@ -647,6 +680,15 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 .elementor-10968 .elementor-element-b145162 {
   z-index: 1000 !important;
   width: 100% !important;
+}
+
+.elementor-10968 .elementor-element-6ee86a0 {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+body.home .elementor-location-header {
+  position: relative;
 }
 
 body.home .elementor-10968 .elementor-element-bf83e51 {
@@ -657,12 +699,21 @@ body.home .elementor-10968 .elementor-element-bf83e51 {
   background-color: rgba(242, 240, 235, 0.92) !important;
 }
 
-body:not(.home) .elementor-10968 .elementor-element-bf83e51,
-body:not(.home) .elementor-10968 .elementor-element-b145162 {
-  position: sticky !important;
+/* Inner pages: fixed header overlays hero — no document-flow gap */
+body:not(.home) .elementor-location-header {
+  position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
+  width: 100% !important;
+}
+
+body:not(.home) .elementor-10968 .elementor-element-bf83e51,
+body:not(.home) .elementor-10968 .elementor-element-b145162 {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
   background-color: #f2f0eb !important;
   box-shadow: 0 2px 16px rgba(28, 28, 29, 0.08);
 }
@@ -796,7 +847,8 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
   }
 }
 
-/* ---- Inner pages: flush hero under navbar ---- */
+/* ---- Inner pages: flush hero under fixed navbar ---- */
+body:not(.home) #page .site-content,
 body:not(.home) #content.site-content,
 body:not(.home) #content .col-full,
 body:not(.home) #content #primary,
@@ -804,6 +856,7 @@ body:not(.home) #content .site-main,
 body:not(.home) #content .entry-content {
   padding-top: 0 !important;
   margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 body:not(.home) #content .entry-content > .elementor > .e-con.e-parent:first-child {
@@ -812,16 +865,27 @@ body:not(.home) #content .entry-content > .elementor > .e-con.e-parent:first-chi
 
 body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero {
   margin-top: 0 !important;
-  padding-top: clamp(72px, 12vw, 120px) !important;
+  padding-top: clamp(88px, 14vw, 150px) !important;
+  padding-bottom: clamp(56px, 8vw, 120px) !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  min-height: clamp(220px, 32vw, 360px) !important;
+  background-attachment: scroll !important;
+  min-height: clamp(260px, 38vw, 420px) !important;
+  transform: none !important;
+  will-change: auto !important;
+}
+
+body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero .elementor-motion-effects-container,
+body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero [class*="motion-fx"] {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero-solid {
   margin-top: 0 !important;
-  padding-top: clamp(48px, 8vw, 88px) !important;
+  padding-top: calc(var(--kiz-header-h) + 24px) !important;
   padding-bottom: clamp(24px, 4vw, 48px) !important;
 }
 
@@ -829,7 +893,6 @@ body:not(.home) .elementor-element-12b6bd6,
 body:not(.home) .elementor-element-f969415,
 body:not(.home) .elementor-element-4a935a {
   margin-top: 0 !important;
-  padding-top: clamp(48px, 8vw, 88px) !important;
 }
 
 @media (min-width: 1025px) {
