@@ -30,6 +30,22 @@ body.home #SR7_1_1-6-15 {
   text-align: center !important;
   width: min(92vw, 860px) !important;
   max-width: min(92vw, 860px) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body.home sr7-txt,
+body.home sr7-slide sr7-txt,
+body.home sr7-slide a.sr7-layer {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body.home sr7-txt strong,
+body.home sr7-txt b,
+body.home sr7-txt span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 body.home #SR7_1_1-3-2 {
@@ -38,13 +54,16 @@ body.home #SR7_1_1-3-2 {
   font-weight: 700 !important;
   line-height: 1.08 !important;
   letter-spacing: -0.03em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 body.home #SR7_1_1-3-3 {
   top: clamp(220px, 38vh, 340px) !important;
   font-size: clamp(14px, 1.35vw, 18px) !important;
   line-height: 1.65 !important;
-  color: rgba(255, 255, 255, 0.92) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 body.home #SR7_1_1-1-13,
