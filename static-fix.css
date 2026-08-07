@@ -1,36 +1,11 @@
 /* Static site fixes for Kızılağaç İnşaat clone */
 
 /* ---- Overlays ---- */
+.antra-overlay,
 .site-search-popup-overlay,
 .site-search-popup:not(.active) {
   display: none !important;
   pointer-events: none !important;
-}
-
-/* Mobile menu backdrop — tap outside to close */
-.antra-overlay {
-  display: block !important;
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 9998 !important;
-  background: rgba(0, 0, 0, 0.5) !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.25s ease, visibility 0.25s ease !important;
-}
-
-html.mobile-nav-active .antra-overlay {
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-html.mobile-nav-active,
-html.mobile-nav-active body {
-  overflow: hidden !important;
 }
 
 /* ---- Smooth scrolling & performance ---- */
@@ -1050,16 +1025,22 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
     font-size: 15px !important;
     font-weight: 500 !important;
     white-space: nowrap !important;
-    text-decoration: none !important;
+    padding: 8px 14px !important;
+    border-radius: 8px !important;
+    transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a:hover {
-    color: var(--kiz-brand, #a62626) !important;
+    color: #a62626 !important;
+    background-color: rgba(166, 38, 38, 0.08) !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-item > a,
-  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current_page_item > a {
-    color: #fff !important;
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current_page_item > a,
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-ancestor > a {
+    color: #a62626 !important;
+    background-color: rgba(166, 38, 38, 0.12) !important;
+    font-weight: 600 !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu {
@@ -1282,59 +1263,41 @@ body:not(.home) .elementor-10968 .elementor-element-b145162 {
     backdrop-filter var(--kiz-transition);
 }
 
-/* Modern desktop nav — soft red pill highlight, no underlines */
+/* Nav links — modern pill hover/active (no underlines) */
 @media (min-width: 768px) {
-  .elementor-10968 .main-navigation .menu > li > a,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item > a {
-    position: relative !important;
+  .elementor-10968 .main-navigation .menu > li > a {
+    position: relative;
     display: inline-flex !important;
     align-items: center !important;
-    padding: 8px 16px !important;
-    margin: 0 3px !important;
-    border-radius: 999px !important;
-    text-decoration: none !important;
-    transition: color 0.25s var(--kiz-ease), background-color 0.25s var(--kiz-ease),
-      box-shadow 0.25s var(--kiz-ease) !important;
+    padding: 8px 14px !important;
+    border-radius: 8px !important;
+    transition: color 0.25s ease, background-color 0.25s ease !important;
   }
 
-  .elementor-10968 .main-navigation .menu > li > a::after,
-  .elementor-10968 .main-navigation .menu > li > a::before {
+  .elementor-10968 .main-navigation .menu > li > a::after {
     display: none !important;
     content: none !important;
   }
 
   .elementor-10968 .main-navigation .menu > li > a > span::before,
-  .elementor-10968 .main-navigation .menu > li > a > span:before,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item > a > span:before {
+  .elementor-10968 .main-navigation .menu > li > a > span:before {
     display: none !important;
     content: none !important;
     width: 0 !important;
     height: 0 !important;
   }
 
-  .elementor-10968 .main-navigation .menu > li > a:hover,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item:hover > a {
+  .elementor-10968 .main-navigation .menu > li > a:hover {
     color: var(--kiz-brand, #a62626) !important;
-    background-color: rgba(166, 38, 38, 0.09) !important;
+    background-color: rgba(166, 38, 38, 0.08) !important;
   }
 
   .elementor-10968 .main-navigation .menu > li.current-menu-item > a,
   .elementor-10968 .main-navigation .menu > li.current_page_item > a,
-  .elementor-10968 .main-navigation .menu > li.current-menu-ancestor > a,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-item > a,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-parent > a,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-ancestor > a {
-    color: #fff !important;
-    background-color: var(--kiz-brand, #a62626) !important;
-    box-shadow: 0 4px 14px rgba(166, 38, 38, 0.28) !important;
-  }
-
-  .elementor-10968 .main-navigation .menu > li.current-menu-item > a:hover,
-  .elementor-10968 .main-navigation .menu > li.current_page_item > a:hover,
-  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-item > a:hover {
-    color: #fff !important;
-    background-color: var(--kiz-brand-dark, #7a0000) !important;
-    box-shadow: 0 6px 18px rgba(166, 38, 38, 0.32) !important;
+  .elementor-10968 .main-navigation .menu > li.current-menu-ancestor > a {
+    color: var(--kiz-brand, #a62626) !important;
+    background-color: rgba(166, 38, 38, 0.12) !important;
+    font-weight: 600 !important;
   }
 }
 
