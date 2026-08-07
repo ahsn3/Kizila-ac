@@ -1544,6 +1544,81 @@ body.home sr7-content {
   transform: translateY(-1px);
 }
 
+/* Mobile project grid layout toggle (1 vs 2 per row) */
+@media (max-width: 767px) {
+  .kiz-grid-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+    padding: 0 4px;
+  }
+
+  .kiz-grid-toggle-btn {
+    border: 1px solid rgba(28, 28, 29, 0.12);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: #fff;
+    color: #1c1c1d;
+    cursor: pointer;
+    transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease,
+      transform 0.22s ease;
+  }
+
+  .kiz-grid-toggle-btn.is-active,
+  .kiz-grid-toggle-btn:hover {
+    background: #a62626;
+    border-color: #a62626;
+    color: #fff;
+  }
+
+  .elementor-widget-loop-grid.kiz-grid-cols-2 {
+    --grid-columns: 2 !important;
+  }
+
+  .elementor-widget-loop-grid.kiz-grid-cols-2 .elementor-loop-container.elementor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 8px !important;
+    row-gap: 10px !important;
+  }
+
+  .elementor-widget-loop-grid.kiz-grid-cols-2 .loop-card:hover {
+    transform: none !important;
+  }
+
+  .elementor-widget-loop-grid.kiz-grid-cols-2 .elementor-element-a8f1e25 img,
+  .elementor-widget-loop-grid.kiz-grid-cols-2 .loop-card img {
+    height: clamp(108px, 31vw, 148px) !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .elementor-widget-loop-grid.kiz-grid-cols-2 .elementor-element-93e6f9b .elementor-heading-title {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    margin: 6px 4px 8px !important;
+    text-align: center !important;
+  }
+
+  .elementor-widget-loop-grid.kiz-grid-cols-2 .loop-card {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 14px rgba(28, 28, 29, 0.08) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .kiz-grid-toggle {
+    display: none !important;
+  }
+}
+
 /* Buttons */
 .elementor-button,
 .wpcf7 input[type="submit"],

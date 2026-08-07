@@ -884,6 +884,121 @@
     });
   }
 
+  var PROJECT_GRID_STORAGE_KEY = 'kiz-project-grid-cols';
+
+  function isProjectGridMobile() {
+    return window.matchMedia('(max-width: 767px)').matches;
+  }
+
+  function getSavedProjectGridCols() {
+    try {
+      return localStorage.getItem(PROJECT_GRID_STORAGE_KEY) === '2' ? '2' : '1';
+    } catch (e) {
+      return '1';
+    }
+  }
+
+  function setProjectGridCols(gridWidget, cols) {
+    gridWidget.classList.toggle('kiz-grid-cols-2', cols === '2');
+
+    var bar = gridWidget.previousElementSibling;
+    if (!bar || !bar.classList.contains('kiz-grid-toggle')) return;
+
+    bar.querySelectorAll('.kiz-grid-toggle-btn').forEach(function (btn) {
+      var active = btn.getAttribute('data-cols') === cols;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function syncProjectGridToggle() {
+    var mobile = isProjectGridMobile();
+    var cols = getSavedProjectGridCols();
+
+    document.querySelectorAll('.elementor-widget-loop-grid').forEach(function (gridWidget) {
+      if (!gridWidget.querySelector('.loop-card')) return;
+
+      var bar = gridWidget.previousElementSibling;
+      if (bar && bar.classList.contains('kiz-grid-toggle')) {
+        bar.style.display = mobile ? 'flex' : 'none';
+      }
+
+      if (!mobile) {
+        gridWidget.classList.remove('kiz-grid-cols-2');
+        return;
+      }
+
+      setProjectGridCols(gridWidget, cols);
+    });
+  }
+
+  function initProjectGridToggle() {
+    var isEn = (window.location.pathname || '').indexOf('/en/') !== -1;
+    var labels = {
+      group: isEn ? 'Project grid layout' : 'Proje görünümü',
+      one: isEn ? '1 per row' : '1\'li',
+      two: isEn ? '2 per row' : '2\'li'
+    };
+
+    document.querySelectorAll('.elementor-widget-loop-grid').forEach(function (gridWidget) {
+      if (!gridWidget.querySelector('.loop-card')) return;
+      if (gridWidget.dataset.kizGridToggleBound) return;
+      gridWidget.dataset.kizGridToggleBound = '1';
+
+      var bar = document.createElement('div');
+      bar.className = 'kiz-grid-toggle';
+      bar.setAttribute('role', 'group');
+      bar.setAttribute('aria-label', labels.group);
+
+      var btn1 = document.createElement('button');
+      btn1.type = 'button';
+      btn1.className = 'kiz-grid-toggle-btn is-active';
+      btn1.setAttribute('data-cols', '1');
+      btn1.setAttribute('aria-pressed', 'true');
+      btn1.textContent = labels.one;
+
+      var btn2 = document.createElement('button');
+      btn2.type = 'button';
+      btn2.className = 'kiz-grid-toggle-btn';
+      btn2.setAttribute('data-cols', '2');
+      btn2.setAttribute('aria-pressed', 'false');
+      btn2.textContent = labels.two;
+
+      bar.appendChild(btn1);
+      bar.appendChild(btn2);
+
+      var parent = gridWidget.parentElement;
+      var filter = parent ? parent.querySelector('.elementor-widget-taxonomy-filter') : null;
+      if (filter && filter.parentElement === parent) {
+        parent.insertBefore(bar, gridWidget);
+      } else {
+        gridWidget.parentElement.insertBefore(bar, gridWidget);
+      }
+
+      function applyCols(cols) {
+        try {
+          localStorage.setItem(PROJECT_GRID_STORAGE_KEY, cols);
+        } catch (e) {
+          /* ignore */
+        }
+        document.querySelectorAll('.elementor-widget-loop-grid').forEach(function (widget) {
+          if (!widget.querySelector('.loop-card')) return;
+          setProjectGridCols(widget, cols);
+        });
+      }
+
+      btn1.addEventListener('click', function () {
+        applyCols('1');
+      });
+
+      btn2.addEventListener('click', function () {
+        applyCols('2');
+      });
+    });
+
+    syncProjectGridToggle();
+  }
+
   var pageRevealed = false;
 
   function revealPage() {
@@ -918,6 +1033,7 @@
     initSmoothAnchors();
     initMobileMenu();
     initDesktopDropdowns();
+    initProjectGridToggle();
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
@@ -934,6 +1050,7 @@
     fixMobileHeader();
     fixFooter();
     initDesktopDropdowns();
+    syncProjectGridToggle();
   });
 
   window.addEventListener('load', function () {
@@ -950,6 +1067,7 @@
     fixHeader();
     initMobileMenu();
     initDesktopDropdowns();
+    initProjectGridToggle();
     fixInnerPageHeroes();
     fixFooter();
     fixWhatsAppButton();
