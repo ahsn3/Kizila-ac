@@ -910,3 +910,11 @@ body:not(.home) .elementor-element-4a935a {
     text-align: left !important;
   }
 }
+
+/* Scroll-to-top overlaps WhatsApp widget — hide both theme + HFE buttons */
+.scrollup,
+.hfe-scroll-to-top-wrap {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

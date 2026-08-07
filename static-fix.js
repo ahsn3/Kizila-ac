@@ -366,6 +366,12 @@
     });
   }
 
+  function removeScrollToTop() {
+    document.querySelectorAll('.scrollup, .hfe-scroll-to-top-wrap').forEach(function (el) {
+      el.remove();
+    });
+  }
+
   function init() {
     disableStickySpacers();
     fixHeroBackgrounds();
@@ -377,6 +383,7 @@
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
+    removeScrollToTop();
   }
 
   window.addEventListener('load', function () {
@@ -388,6 +395,7 @@
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
+    removeScrollToTop();
   });
 
   /* Removed per-scroll disableMotionEffects — it caused hero lag on inner pages */
