@@ -489,6 +489,9 @@
         var btn = li.querySelector('.kiz-mobile-submenu-toggle');
         if (btn) btn.setAttribute('aria-expanded', 'false');
       });
+      document.querySelectorAll('.antra-mobile-nav .kiz-mobile-submenu-open').forEach(function (li) {
+        li.classList.remove('kiz-mobile-submenu-open');
+      });
     }
 
     function toggleMobileNav() {
@@ -513,7 +516,7 @@
       });
     });
 
-    document.querySelectorAll('.handheld-navigation .menu-item-has-children').forEach(function (li) {
+    document.querySelectorAll('.antra-mobile-nav .menu-item-has-children').forEach(function (li) {
       li.querySelectorAll('.dropdown-toggle').forEach(function (el) {
         el.remove();
       });
@@ -531,12 +534,29 @@
       if (toggle.dataset.kizSubBound) return;
       toggle.dataset.kizSubBound = '1';
 
+      function setSubmenuOpen(open) {
+        li.classList.toggle('kiz-mobile-submenu-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
       toggle.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var open = li.classList.toggle('kiz-mobile-submenu-open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        setSubmenuOpen(!li.classList.contains('kiz-mobile-submenu-open'));
       });
+
+      var parentLink = li.querySelector(':scope > a');
+      if (parentLink && !parentLink.dataset.kizSubLinkBound) {
+        parentLink.dataset.kizSubLinkBound = '1';
+        parentLink.addEventListener('click', function (e) {
+          if (!html.classList.contains('mobile-nav-active')) return;
+          if (!window.matchMedia('(max-width: 767px)').matches) return;
+          var sub = li.querySelector(':scope > .sub-menu');
+          if (!sub) return;
+          e.preventDefault();
+          setSubmenuOpen(!li.classList.contains('kiz-mobile-submenu-open'));
+        });
+      }
     });
 
     if (!document.documentElement.dataset.kizMobileResizeBound) {
