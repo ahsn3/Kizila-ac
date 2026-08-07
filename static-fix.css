@@ -597,7 +597,26 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
   display: none !important;
 }
 
-/* ---- Inner-page header (elementor-10968) ---- */
+/* ---- Site header / navbar (elementor-10968) ---- */
+.elementor-location-header {
+  position: relative;
+  z-index: 1000 !important;
+}
+
+.elementor-10968 .elementor-element-bf83e51,
+.elementor-10968 .elementor-element-b145162 {
+  z-index: 1000 !important;
+  width: 100% !important;
+}
+
+body.home .elementor-10968 .elementor-element-bf83e51 {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background-color: rgba(242, 240, 235, 0.92) !important;
+}
+
 body:not(.home) .elementor-10968 .elementor-element-bf83e51,
 body:not(.home) .elementor-10968 .elementor-element-b145162 {
   position: sticky !important;
@@ -613,14 +632,39 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
   background-color: #f2f0eb !important;
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 768px) {
   .elementor-10968 .elementor-element.elementor-element-6ee86a0 {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     width: 100% !important;
+    max-width: 1320px !important;
+    margin: 0 auto !important;
     padding: 12px 30px !important;
+    gap: 24px !important;
+  }
+
+  .elementor-10968 .elementor-element-9c49ce4 {
+    width: auto !important;
+    max-width: 200px !important;
+    flex: 0 0 auto !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    --container-widget-width: 100% !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .elementor-widget-container {
+    width: 100% !important;
+  }
+
+  /* Theme hides .primary-navigation by default — must override */
+  .elementor-10968 .main-navigation .primary-navigation {
+    display: block !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu {
@@ -639,7 +683,19 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
     position: relative !important;
   }
 
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a {
+    color: #1c1c1d !important;
+    font-size: 15px !important;
+    white-space: nowrap !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a:hover,
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-item > a {
+    color: #a62626 !important;
+  }
+
   .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu {
+    display: none;
     position: absolute !important;
     top: calc(100% + 8px) !important;
     left: 0 !important;
@@ -650,12 +706,20 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
     background: #fff !important;
     border-radius: 8px !important;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
-    z-index: 1000 !important;
+    z-index: 1001 !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li:hover > .sub-menu,
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li:focus-within > .sub-menu {
+    display: block !important;
   }
 
   .elementor-10968 .elementor-element-864fe55 {
     transform: none !important;
     margin: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
   }
 }
 

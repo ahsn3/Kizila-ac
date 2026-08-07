@@ -277,6 +277,18 @@
     SR7.E.resturl = '';
   }
 
+  function fixHeader() {
+    document.querySelectorAll('.elementor-10968 .main-navigation .primary-navigation').forEach(function (nav) {
+      nav.style.setProperty('display', 'block', 'important');
+    });
+
+    document.querySelectorAll('.elementor-10968 .main-navigation .menu').forEach(function (menu) {
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        menu.style.setProperty('display', 'flex', 'important');
+      }
+    });
+  }
+
   function init() {
     fixHeroBackgrounds();
     initAllHeroSliders();
@@ -284,6 +296,7 @@
     disableMotionEffects();
     disableLenisScroll();
     initScrollReveal();
+    fixHeader();
     fixFooter();
   }
 
@@ -292,6 +305,7 @@
     disableJarallax();
     disableMotionEffects();
     fixHeroBackgrounds();
+    fixHeader();
     fixFooter();
   });
 

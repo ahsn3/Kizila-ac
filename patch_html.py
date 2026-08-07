@@ -54,9 +54,9 @@ def patch_file(fpath):
 
     rel = depth_rel(fpath.parent)
     css_rel = rel.replace("static-fix.js", "static-fix.css")
-    if "static-fix.css" not in text and css_rel not in text:
-        if "</head>" in text:
-            text = text.replace("</head>", f'<link rel="stylesheet" href="{css_rel}" />\n</head>', 1)
+    text = re.sub(r'<link[^>]*href=["\'][^"\']*static-fix\.css["\'][^>]*>\s*', "", text, flags=re.I)
+    if "</head>" in text:
+        text = text.replace("</head>", f'<link rel="stylesheet" href="{css_rel}" />\n</head>', 1)
 
     if "</body>" in text:
         text = text.replace("</body>", f'<script src="{rel}"></script>\n</body>', 1)
