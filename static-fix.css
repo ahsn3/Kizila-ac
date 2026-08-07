@@ -1,11 +1,36 @@
 /* Static site fixes for Kızılağaç İnşaat clone */
 
 /* ---- Overlays ---- */
-.antra-overlay,
 .site-search-popup-overlay,
 .site-search-popup:not(.active) {
   display: none !important;
   pointer-events: none !important;
+}
+
+/* Mobile menu backdrop — tap outside to close */
+.antra-overlay {
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9998 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
+
+html.mobile-nav-active .antra-overlay {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+html.mobile-nav-active,
+html.mobile-nav-active body {
+  overflow: hidden !important;
 }
 
 /* ---- Smooth scrolling & performance ---- */

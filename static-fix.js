@@ -583,6 +583,46 @@
     });
   }
 
+  function initMobileMenuDismiss() {
+    function closeMobileNav() {
+      document.documentElement.classList.remove('mobile-nav-active');
+    }
+
+    function bindOnce(el, event, handler) {
+      if (!el || el.dataset.kizMenuBound) return;
+      el.dataset.kizMenuBound = '1';
+      el.addEventListener(event, handler);
+    }
+
+    document.querySelectorAll('.menu-mobile-nav-button').forEach(function (btn) {
+      bindOnce(btn, 'click', function (e) {
+        e.preventDefault();
+        document.documentElement.classList.toggle('mobile-nav-active');
+      });
+    });
+
+    document.querySelectorAll('.mobile-nav-close').forEach(function (btn) {
+      bindOnce(btn, 'click', function (e) {
+        e.preventDefault();
+        closeMobileNav();
+      });
+    });
+
+    document.querySelectorAll('.antra-overlay').forEach(function (overlay) {
+      bindOnce(overlay, 'click', function (e) {
+        e.preventDefault();
+        closeMobileNav();
+      });
+    });
+
+    document.querySelectorAll('.antra-mobile-nav a[href]').forEach(function (link) {
+      if (link.getAttribute('href') === '#') return;
+      bindOnce(link, 'click', function () {
+        closeMobileNav();
+      });
+    });
+  }
+
   function fixFooter() {
     var footer = document.getElementById('colophon');
     if (!footer) return;
@@ -797,6 +837,7 @@
     fixFooter();
     fixWhatsAppButton();
     fixMobileHeader();
+    initMobileMenuDismiss();
     removeScrollToTop();
   }
 
@@ -822,6 +863,7 @@
     fixFooter();
     fixWhatsAppButton();
     fixMobileHeader();
+    initMobileMenuDismiss();
     removeScrollToTop();
     window.setTimeout(fixPageScroll, 250);
     window.setTimeout(applySiteHeader, 250);
