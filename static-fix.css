@@ -235,18 +235,13 @@ html.mobile-nav-active .antra-mobile-nav {
 
 /* ---- Smooth scrolling & performance ---- */
 html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+  scroll-behavior: auto;
 }
 
 html,
 body {
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
 }
 
 #content,
@@ -457,7 +452,6 @@ sr7-module.rs-ov-hidden {
   height: clamp(520px, 100vh, 910px) !important;
   overflow: hidden !important;
   background: #111;
-  contain: layout style paint;
 }
 
 body.home sr7-module,
@@ -1172,8 +1166,6 @@ body.home .elementor-location-header {
   margin: 0 !important;
   padding: 0 !important;
   pointer-events: auto;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 body.home .elementor-10968 .elementor-element-bf83e51,
@@ -1584,26 +1576,25 @@ body:not(.home) .elementor-element-4a935a {
   color: var(--kiz-ink);
 }
 
-/* Glass navbar — stronger on scroll */
+/* Navbar — solid background (no blur) for smoother scrolling */
 body.home:not(.kiz-scrolled) .elementor-10968 .elementor-element-bf83e51,
 body.home:not(.kiz-scrolled) .elementor-10968 .elementor-element-b145162 {
-  background-color: rgba(242, 240, 235, 0.72) !important;
-  backdrop-filter: blur(12px) saturate(1.15);
-  -webkit-backdrop-filter: blur(12px) saturate(1.15);
-  transition: background-color var(--kiz-transition), box-shadow var(--kiz-transition),
-    backdrop-filter var(--kiz-transition);
+  background-color: rgba(242, 240, 235, 0.9) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: background-color var(--kiz-transition), box-shadow var(--kiz-transition) !important;
 }
 
 body.kiz-scrolled .elementor-10968 .elementor-element-bf83e51,
 body.kiz-scrolled .elementor-10968 .elementor-element-b145162,
 body:not(.home) .elementor-10968 .elementor-element-bf83e51,
 body:not(.home) .elementor-10968 .elementor-element-b145162 {
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  box-shadow: 0 8px 32px rgba(28, 28, 29, 0.08);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: rgba(242, 240, 235, 0.98) !important;
+  box-shadow: 0 4px 20px rgba(28, 28, 29, 0.06);
   border-bottom: 1px solid rgba(28, 28, 29, 0.06);
-  transition: background-color var(--kiz-transition), box-shadow var(--kiz-transition),
-    backdrop-filter var(--kiz-transition);
+  transition: background-color var(--kiz-transition), box-shadow var(--kiz-transition) !important;
 }
 
 /* Nav links — unified size/weight on all pages (overrides Elementor header span sizing) */
@@ -1776,8 +1767,6 @@ body.home sr7-content {
 #SR7_1_1-1-14,
 #SR7_1_1-6-16 {
   border-radius: 999px !important;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 #SR7_1_1-1-14:hover,
@@ -1990,6 +1979,7 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
 .kiz-fade-up {
   transform: translate3d(0, 32px, 0);
   transition: opacity 0.65s var(--kiz-ease), transform 0.65s var(--kiz-ease);
+  will-change: auto;
 }
 
 .kiz-fade-up.is-visible {
