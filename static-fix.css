@@ -1565,6 +1565,14 @@ body.home sr7-content {
 
 .loop-card img {
   transition: transform 0.65s var(--kiz-ease), filter var(--kiz-transition) !important;
+  object-fit: cover !important;
+}
+
+.service-image img,
+.post-thumbnail.service-image img,
+.elementor-post-thumbnail img {
+  object-fit: cover !important;
+  width: 100% !important;
 }
 
 .loop-card:hover img {
