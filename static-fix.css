@@ -1212,6 +1212,15 @@ sr7-module::after {
   z-index: 3;
 }
 
+body.home sr7-module::after {
+  z-index: 2 !important;
+}
+
+body.home sr7-content {
+  position: relative !important;
+  z-index: 5 !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   sr7-slide.sr7-static-active sr7-bg img {
     animation: kiz-hero-zoom 14s var(--kiz-ease) forwards;

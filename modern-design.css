@@ -14,6 +14,28 @@ body.home sr7-module::after {
     rgba(15, 15, 16, 0.35) 45%,
     rgba(15, 15, 16, 0.62) 100%
   ) !important;
+  z-index: 2 !important;
+}
+
+body.home sr7-content {
+  z-index: 5 !important;
+}
+
+body.home sr7-bg,
+body.home sr7-bg.sr7-layer {
+  z-index: 1 !important;
+}
+
+body.home sr7-txt,
+body.home sr7-slide sr7-txt,
+body.home sr7-slide a.sr7-layer,
+body.home .kiz-hero-actions {
+  z-index: 10 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
 }
 
 body.home #SR7_1_1-3-10 {

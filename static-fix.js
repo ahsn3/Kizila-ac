@@ -211,6 +211,19 @@
     slide.appendChild(wrap);
   }
 
+  function forceHeroTextWhite() {
+    if (!document.body.classList.contains('home')) return;
+    var module = document.getElementById('SR7_1_1');
+    if (!module) return;
+
+    module.querySelectorAll('sr7-txt, sr7-txt *, sr7-slide a.sr7-layer').forEach(function (el) {
+      el.style.setProperty('color', '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      el.style.setProperty('opacity', '1', 'important');
+      el.style.setProperty('mix-blend-mode', 'normal', 'important');
+    });
+  }
+
   function disableLenisScroll() {
     if (window.lenisInstance && typeof window.lenisInstance.destroy === 'function') {
       window.lenisInstance.destroy();
@@ -671,6 +684,7 @@
     fixHeroBackgrounds();
     applyModernHeroBackgrounds();
     injectHomeHeroCtas();
+    forceHeroTextWhite();
     initAllHeroSliders();
     disableJarallax();
     disableMotionEffects();
@@ -700,6 +714,7 @@
     fixHeroBackgrounds();
     applyModernHeroBackgrounds();
     injectHomeHeroCtas();
+    forceHeroTextWhite();
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
@@ -708,6 +723,8 @@
     window.setTimeout(fixPageScroll, 250);
     window.setTimeout(fixHomeHeader, 250);
     window.setTimeout(fixMobileHeader, 250);
+    window.setTimeout(forceHeroTextWhite, 100);
+    window.setTimeout(forceHeroTextWhite, 500);
     window.setTimeout(function () {
       disableStickySpacers();
       fixHomeHeader();
