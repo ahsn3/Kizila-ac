@@ -852,12 +852,8 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
   }
 }
 
-#colophon .elementor-element-b10d0b1 .elementor-heading-title {
-  color: #1c1c1d !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.16em !important;
-  margin-bottom: 18px !important;
+#colophon .elementor-element-b10d0b1 {
+  display: none !important;
 }
 
 #colophon .elementor-element-48d6ff42 .elementor-widget-text-editor p {
@@ -1116,7 +1112,7 @@ body {
 
 .elementor-10968 .elementor-element-bf83e51,
 .elementor-10968 .elementor-element-b145162 {
-  z-index: 1000 !important;
+  z-index: 10050 !important;
   width: 100% !important;
   position: relative !important;
   top: auto !important;
