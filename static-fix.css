@@ -1850,7 +1850,40 @@ body.home sr7-content {
   transform: translateY(-1px);
 }
 
+/* Projects grid — keep all cards as direct grid children */
+.elementor-widget-loop-grid .elementor-loop-container.elementor-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 28px;
+  align-items: stretch;
+}
+
+.elementor-widget-loop-grid .e-loop-item {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .elementor-widget-loop-grid .elementor-loop-container.elementor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .elementor-widget-loop-grid .elementor-loop-container.elementor-grid:not(.kiz-grid-cols-2) {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 18px;
+  }
+}
+
 /* Mobile project grid layout toggle (1 vs 2 per row) */
+.elementor-widget-loop-grid .elementor-pagination,
+.elementor-widget-loop-grid .e-load-more-anchor {
+  display: none !important;
+}
+
 @media (max-width: 767px) {
   .kiz-grid-toggle {
     display: flex;

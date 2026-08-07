@@ -14,7 +14,9 @@ PAIRS = [
 
 def extract_loop_items(html: str) -> str:
     items = re.findall(
-        r'(<div data-elementor-type="loop-item"[\s\S]*?</div>\s*</div>\s*</div>)',
+        r'(<div data-elementor-type="loop-item"[^>]*class="[^"]*e-loop-item-\d+[^"]*"[\s\S]*?'
+        r'</div>\s*</div>\s*</div>)(?=\s*(?:<div data-elementor-type="loop-item"|'
+        r'\s*</div>\s*\n\s*<div class="e-load-more-anchor"))',
         html,
     )
     if not items:

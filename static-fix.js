@@ -324,7 +324,11 @@
   function heroBgUrl(key) {
     var path = HERO_BG[key];
     if (!path) return '';
-    return siteRootPrefix() + path;
+    var parts = path.split('/');
+    var file = parts.pop();
+    var url = siteRootPrefix() + parts.join('/') + (parts.length ? '/' : '') + encodeURIComponent(file);
+    if (key === 'architecture') url += '?v=2';
+    return url;
   }
 
   function setBgImage(el, url) {
@@ -1372,6 +1376,17 @@
     });
   }
 
+  function fixProjectsLoopGrid() {
+    document.querySelectorAll('.elementor-loop-container.elementor-grid').forEach(function (container) {
+      var items = container.querySelectorAll('.e-loop-item');
+      items.forEach(function (item) {
+        if (item.parentElement !== container) {
+          container.appendChild(item);
+        }
+      });
+    });
+  }
+
   var PROJECT_GRID_STORAGE_KEY = 'kiz-project-grid-cols';
 
   function isProjectGridMobile() {
@@ -1525,6 +1540,7 @@
     markActiveNav();
     initLanguageSwitcher();
     initContactPage();
+    fixProjectsLoopGrid();
     initProjectGridToggle();
     fixHeader();
     fixInnerPageHeroes();
@@ -1563,6 +1579,7 @@
     markActiveNav();
     initLanguageSwitcher();
     initContactPage();
+    fixProjectsLoopGrid();
     initProjectGridToggle();
     fixInnerPageHeroes();
     fixFooter();
