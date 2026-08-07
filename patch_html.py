@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.resolve()
 SITE_URL = "https://kizilagac.netlify.app"
-OG_IMAGE = f"{SITE_URL}/og-share.jpg"
+OG_IMAGE = f"{SITE_URL}/og-share.jpg?v=2"
 DEFAULT_DESC_TR = (
     "Kızılağaç İnşaat — uzun yıllara dayanan tecrübemizle İstanbul'da güvenilir, "
     "kaliteli ve anahtar teslim inşaat hizmetleri sunuyoruz."
@@ -156,6 +156,8 @@ def pick_og_image(text: str) -> str:
     if match:
         url = abs_media_url(match.group(1))
         if "gravatar.com" not in url and "secure.gravatar" not in url:
+            if "og-share.jpg" in url:
+                return OG_IMAGE
             return url
     return OG_IMAGE
 
@@ -185,6 +187,7 @@ def patch_meta_tags(text: str, fpath: Path) -> str:
     text = upsert_meta_property(text, "og:image:width", "1200")
     text = upsert_meta_property(text, "og:image:height", "630")
     text = upsert_meta_property(text, "og:image:alt", og_title)
+    text = upsert_meta_property(text, "og:image:type", "image/jpeg")
 
     text = upsert_meta_name(text, "twitter:card", "summary_large_image")
     text = upsert_meta_name(text, "twitter:title", og_title)
