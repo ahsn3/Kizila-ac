@@ -327,18 +327,34 @@
 
   function initMobileMenu() {
     var html = document.documentElement;
+    var isEn = (window.location.pathname || '').indexOf('/en/') !== -1;
+    var root = siteRootPrefix();
 
     if (window.jQuery) {
       window.jQuery('.menu-mobile-nav-button, .antra-overlay, .mobile-nav-close').off('click');
-      window.jQuery('.handheld-navigation .dropdown-toggle').off('click');
+      window.jQuery('.antra-mobile-nav .dropdown-toggle').off('click');
     }
 
-    document.querySelectorAll('.handheld-navigation .dropdown-toggle').forEach(function (el) {
+    document.querySelectorAll('.antra-mobile-nav .dropdown-toggle').forEach(function (el) {
       el.remove();
+    });
+
+    document.querySelectorAll('.handheld-navigation .menu-item-has-children > a[href="#"]').forEach(function (a) {
+      var firstSub = a.parentElement.querySelector('.sub-menu > li > a[href]');
+      if (firstSub && firstSub.getAttribute('href') && firstSub.getAttribute('href') !== '#') {
+        a.setAttribute('href', firstSub.getAttribute('href'));
+        return;
+      }
+      a.setAttribute('href', root + (isEn ? 'en/hizmetler/index.html' : 'hizmetler/index.html'));
     });
 
     function closeMobileNav() {
       html.classList.remove('mobile-nav-active');
+      document.querySelectorAll('.handheld-navigation .kiz-mobile-submenu-open').forEach(function (li) {
+        li.classList.remove('kiz-mobile-submenu-open');
+        var btn = li.querySelector('.kiz-mobile-submenu-toggle');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      });
     }
 
     function toggleMobileNav() {
@@ -364,14 +380,22 @@
     });
 
     document.querySelectorAll('.handheld-navigation .menu-item-has-children').forEach(function (li) {
-      if (li.querySelector('.kiz-mobile-submenu-toggle')) return;
+      li.querySelectorAll('.dropdown-toggle').forEach(function (el) {
+        el.remove();
+      });
 
-      var toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'kiz-mobile-submenu-toggle';
-      toggle.setAttribute('aria-label', 'Alt menüyü aç');
-      toggle.setAttribute('aria-expanded', 'false');
-      li.appendChild(toggle);
+      var toggle = li.querySelector('.kiz-mobile-submenu-toggle');
+      if (!toggle) {
+        toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'kiz-mobile-submenu-toggle';
+        toggle.setAttribute('aria-label', isEn ? 'Toggle submenu' : 'Alt menüyü aç');
+        toggle.setAttribute('aria-expanded', 'false');
+        li.appendChild(toggle);
+      }
+
+      if (toggle.dataset.kizSubBound) return;
+      toggle.dataset.kizSubBound = '1';
 
       toggle.addEventListener('click', function (e) {
         e.preventDefault();
@@ -381,11 +405,14 @@
       });
     });
 
-    window.addEventListener('resize', function () {
-      if (window.matchMedia('(min-width: 768px)').matches) {
-        closeMobileNav();
-      }
-    });
+    if (!document.documentElement.dataset.kizMobileResizeBound) {
+      document.documentElement.dataset.kizMobileResizeBound = '1';
+      window.addEventListener('resize', function () {
+        if (window.matchMedia('(min-width: 768px)').matches) {
+          html.classList.remove('mobile-nav-active');
+        }
+      });
+    }
   }
 
   function initDesktopDropdowns() {

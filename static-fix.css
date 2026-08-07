@@ -78,6 +78,47 @@ html.mobile-nav-active .antra-mobile-nav {
   z-index: 10001 !important;
 }
 
+/* Mobile drawer — global overrides (theme teal tab bar, duplicate arrows, ghost nav) */
+.antra-mobile-nav .mobile-nav-tabs {
+  display: none !important;
+}
+
+.antra-mobile-nav .mobile-categories-menu,
+.antra-mobile-nav .mobile-navigation-categories {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+.antra-mobile-nav .mobile-menu-tab.mobile-pages-menu.active {
+  display: block !important;
+  padding-top: 56px !important;
+}
+
+.antra-mobile-nav .mobile-navigation ul > li.menu-item > a,
+.antra-mobile-nav .handheld-navigation .menu > li > a {
+  border-bottom: none !important;
+}
+
+.antra-mobile-nav .mobile-navigation ul li button::before,
+.antra-mobile-nav .mobile-navigation ul li button::after,
+.antra-mobile-nav .mobile-navigation-categories ul li button::before,
+.antra-mobile-nav .mobile-navigation-categories ul li button::after,
+.antra-mobile-nav .dropdown-toggle::before,
+.antra-mobile-nav .dropdown-toggle::after,
+.antra-mobile-nav .kiz-mobile-submenu-toggle::after {
+  display: none !important;
+  content: none !important;
+}
+
+.antra-mobile-nav .dropdown-toggle {
+  display: none !important;
+}
+
 .antra-overlay {
   z-index: 10000 !important;
 }
@@ -1850,15 +1891,7 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
     color: #1c1c1d !important;
     top: 18px !important;
     right: 18px !important;
-  }
-
-  .antra-mobile-nav .mobile-nav-tabs {
-    padding-top: 56px !important;
-  }
-
-  .antra-mobile-nav .mobile-nav-tabs ul li {
-    color: #1c1c1d !important;
-    font-weight: 600 !important;
+    z-index: 2 !important;
   }
 
   .antra-mobile-nav .mobile-menu-tab {
@@ -1880,11 +1913,20 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
     display: block !important;
     padding: 12px 44px 12px 14px !important;
     border-radius: 8px !important;
+    border-bottom: none !important;
     color: #1c1c1d !important;
     font-size: 15px !important;
     font-weight: 500 !important;
     text-decoration: none !important;
     transition: color 0.2s ease, background-color 0.2s ease !important;
+  }
+
+  .antra-mobile-nav .mobile-navigation ul > li.menu-item > a {
+    border-bottom: none !important;
+    color: #1c1c1d !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    padding: 12px 44px 12px 14px !important;
   }
 
   .handheld-navigation .menu > li > a:hover,
@@ -1903,7 +1945,9 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
     list-style: none !important;
     margin: 0 !important;
     padding: 0 0 0 8px !important;
-    border-left: 2px solid transparent;
+    border: none !important;
+    border-left: 2px solid transparent !important;
+    background: transparent !important;
     transition: max-height 0.28s ease, opacity 0.22s ease, margin 0.22s ease, border-color 0.22s ease;
   }
 
@@ -1952,13 +1996,15 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
 
   .kiz-mobile-submenu-toggle::before {
     content: "";
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-right: 2px solid #1c1c1d;
     border-bottom: 2px solid #1c1c1d;
+    border-left: none;
+    border-top: none;
     transform: rotate(45deg);
     transition: transform 0.2s ease, border-color 0.2s ease;
-    margin-top: -3px;
+    margin-top: -2px;
   }
 
   .kiz-mobile-submenu-toggle:hover {
