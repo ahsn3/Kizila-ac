@@ -51,6 +51,36 @@ body {
   will-change: auto !important;
 }
 
+/* Disable Elementor scroll motion (hero/image lag) */
+.elementor-motion-effects-element,
+.elementor-motion-effects-layer,
+.elementor-motion-effects-container,
+.elementor-widget.elementor-motion-effects-element,
+.elementor-element[data-settings*="motion_fx"] {
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+
+.elementor-element[class*="elementor-motion-effects-element-type-background"],
+.elementor-element[class*="elementor-motion-effects-element-type-background"] .elementor-motion-effects-layer {
+  background-attachment: scroll !important;
+  transform: none !important;
+}
+
+/* Stray mobile footer bar (elementor-47) before #colophon */
+#page > .footer-width-fixer {
+  display: none !important;
+}
+
+/* Footer should not animate in */
+#colophon .kiz-fade-up,
+#colophon .elementor-invisible {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
 .elementor-motion-effects-element,
 .elementor-element {
   backface-visibility: hidden;

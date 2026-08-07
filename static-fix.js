@@ -4,6 +4,12 @@
 (function () {
   'use strict';
 
+  /* Block parallax libs on static hosting */
+  window.jarallax = function () {
+    return { destroy: function () {}, onScroll: function () {} };
+  };
+  window.jarallaxElement = function () {};
+
   var SLIDE_MS = 9000;
   var FADE_MS = 800;
 
@@ -154,6 +160,7 @@
     );
 
     targets.forEach(function (el, index) {
+      if (el.closest('#colophon') || el.closest('.elementor-location-header')) return;
       el.classList.remove('elementor-invisible', 'animated', 'animated-slow');
       el.style.animation = 'none';
       el.classList.add('kiz-fade-up');
@@ -188,6 +195,7 @@
     document.querySelectorAll('[data-jarallax], [data-jarallax-element], .jarallax').forEach(function (el) {
       el.removeAttribute('data-jarallax');
       el.removeAttribute('data-jarallax-element');
+      el.classList.remove('jarallax', 'jarallax-img');
       el.style.transform = 'none';
     });
     if (window.jarallax && typeof window.jarallax === 'function') {
@@ -197,6 +205,17 @@
         /* ignore */
       }
     }
+  }
+
+  function disableMotionEffects() {
+    document.querySelectorAll('.elementor-motion-effects-layer, .elementor-motion-effects-element').forEach(function (el) {
+      el.style.setProperty('transform', 'none', 'important');
+      el.style.setProperty('transition', 'none', 'important');
+      el.style.setProperty('will-change', 'auto', 'important');
+    });
+    document.querySelectorAll('[data-settings*="motion_fx"]').forEach(function (el) {
+      el.style.setProperty('transform', 'none', 'important');
+    });
   }
 
   function siteRootPrefix() {
@@ -239,9 +258,14 @@
     });
 
     footer.querySelectorAll('.elementor-element-7ab684f3 a').forEach(function (a) {
-      if (a.getAttribute('href') && a.getAttribute('href').indexOf('anasayfa') !== -1) {
+      var href = a.getAttribute('href') || '';
+      if (href.indexOf('anasayfa') !== -1 || href.indexOf('kizilagacinsaat.com') !== -1) {
         a.setAttribute('href', root + 'index.html');
       }
+    });
+
+    document.querySelectorAll('#page > .footer-width-fixer').forEach(function (el) {
+      el.remove();
     });
   }
 
@@ -257,6 +281,7 @@
     fixHeroBackgrounds();
     initAllHeroSliders();
     disableJarallax();
+    disableMotionEffects();
     disableLenisScroll();
     initScrollReveal();
     fixFooter();
@@ -264,6 +289,8 @@
 
   window.addEventListener('load', function () {
     disableLenisScroll();
+    disableJarallax();
+    disableMotionEffects();
     fixHeroBackgrounds();
     fixFooter();
   });
