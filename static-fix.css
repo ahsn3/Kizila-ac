@@ -253,6 +253,7 @@ sr7-content {
   width: 100% !important;
   height: 100% !important;
   overflow: hidden !important;
+  z-index: 4 !important;
 }
 
 sr7-slide {
@@ -1209,7 +1210,7 @@ sr7-module::after {
     rgba(0, 0, 0, 0.42) 100%
   );
   pointer-events: none;
-  z-index: 3;
+  z-index: 2;
 }
 
 body.home sr7-module::after {

@@ -216,11 +216,22 @@
     var module = document.getElementById('SR7_1_1');
     if (!module) return;
 
+    var content = module.querySelector('sr7-content');
+    if (content) {
+      content.style.setProperty('z-index', '5', 'important');
+    }
+
     module.querySelectorAll('sr7-txt, sr7-txt *, sr7-slide a.sr7-layer').forEach(function (el) {
       el.style.setProperty('color', '#ffffff', 'important');
       el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
       el.style.setProperty('opacity', '1', 'important');
       el.style.setProperty('mix-blend-mode', 'normal', 'important');
+    });
+
+    module.querySelectorAll('#SR7_1_1-3-2, #SR7_1_1-3-3').forEach(function (el) {
+      el.style.setProperty('opacity', '1', 'important');
+      el.style.setProperty('color', '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
     });
   }
 
