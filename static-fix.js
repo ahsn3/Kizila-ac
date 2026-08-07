@@ -84,8 +84,6 @@
         if (active) resetTextMotion(slide);
       });
       updateBullets(index);
-      preloadHeroSlideIndex(index);
-      preloadHeroSlideIndex(index + 1);
     }
 
     function goTo(index, userTriggered) {
@@ -184,26 +182,10 @@
   }
 
   var HERO_BG = {
-    living: 'hero-background/hero-living.webp',
-    kitchen: 'hero-background/hero-kitchen.webp',
-    architecture: 'hero-background/hero-architecture.webp'
-  };
-
-  var HERO_BG_FALLBACK = {
     living: 'hero-background/hero-living.png',
     kitchen: 'hero-background/hero-kitchen.png',
-    architecture: 'hero-background/hero-architecture.png'
+    architecture: 'hero-background/Mimarlık Hizmetleri.png'
   };
-
-  var HERO_BG_ELEMENTS = {
-    living: 'SR7_1_1-3-12',
-    kitchen: 'SR7_1_1-1-15',
-    architecture: 'SR7_1_1-6-17'
-  };
-
-  var HERO_SLIDE_KEYS = ['living', 'kitchen', 'architecture'];
-  var heroBgCache = {};
-  var heroBgLoading = {};
 
   var SERVICE_PHOTOS = {
     'mimarlik-hizmetleri': 'architecture-services.png',
@@ -339,8 +321,8 @@
     });
   }
 
-  function heroBgUrl(key, useFallback) {
-    var path = (useFallback ? HERO_BG_FALLBACK : HERO_BG)[key];
+  function heroBgUrl(key) {
+    var path = HERO_BG[key];
     if (!path) return '';
     return siteRootPrefix() + path;
   }
@@ -353,81 +335,25 @@
     el.style.setProperty('background-repeat', 'no-repeat', 'important');
   }
 
-  function applyHeroBackground(key, url) {
-    var el = document.getElementById(HERO_BG_ELEMENTS[key]);
-    if (!el || !url) return;
-    setBgImage(el, url);
-    el.querySelectorAll('img').forEach(function (img) {
-      img.style.setProperty('display', 'none', 'important');
-    });
-  }
-
-  function preloadHeroBackground(key, done) {
-    if (heroBgCache[key]) {
-      if (done) done(heroBgCache[key]);
-      return;
-    }
-    if (heroBgLoading[key]) {
-      if (done) heroBgLoading[key].push(done);
-      return;
-    }
-
-    heroBgLoading[key] = done ? [done] : [];
-
-    function finish(url) {
-      heroBgCache[key] = url;
-      var waiting = heroBgLoading[key] || [];
-      heroBgLoading[key] = null;
-      applyHeroBackground(key, url);
-      waiting.forEach(function (cb) {
-        if (cb) cb(url);
-      });
-    }
-
-    function tryLoad(url, onFail) {
-      if (!url) {
-        if (onFail) onFail();
-        return;
-      }
-      var img = new Image();
-      img.decoding = 'async';
-      img.onload = function () {
-        finish(url);
-      };
-      img.onerror = function () {
-        if (onFail) onFail();
-      };
-      img.src = url;
-    }
-
-    tryLoad(heroBgUrl(key, false), function () {
-      tryLoad(heroBgUrl(key, true), function () {
-        heroBgLoading[key] = null;
-      });
-    });
-  }
-
-  function preloadHeroSlideIndex(index) {
-    var key = HERO_SLIDE_KEYS[(index + HERO_SLIDE_KEYS.length) % HERO_SLIDE_KEYS.length];
-    preloadHeroBackground(key);
-  }
-
-  function scheduleIdleHeroPreloads() {
-    var run = function () {
-      preloadHeroBackground('kitchen');
-      preloadHeroBackground('architecture');
-    };
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(run, { timeout: 1200 });
-    } else {
-      window.setTimeout(run, 300);
-    }
-  }
-
   function applyModernHeroBackgrounds() {
     if (!document.body.classList.contains('home')) return;
-    preloadHeroBackground('living');
-    scheduleIdleHeroPreloads();
+
+    var map = {
+      'SR7_1_1-3-12': 'living',
+      'SR7_1_1-1-15': 'kitchen',
+      'SR7_1_1-6-17': 'architecture'
+    };
+
+    Object.keys(map).forEach(function (id) {
+      var bg = document.getElementById(id);
+      if (!bg) return;
+      var url = heroBgUrl(map[id]);
+      if (!url) return;
+      setBgImage(bg, url);
+      bg.querySelectorAll('img').forEach(function (img) {
+        img.style.setProperty('display', 'none', 'important');
+      });
+    });
   }
 
   function injectHomeHeroCtas() {
@@ -483,73 +409,12 @@
   }
 
   function disableLenisScroll() {
-    if (lenisRafId) {
-      window.cancelAnimationFrame(lenisRafId);
-      lenisRafId = null;
-    }
     if (window.lenisInstance && typeof window.lenisInstance.destroy === 'function') {
       window.lenisInstance.destroy();
       window.lenisInstance = null;
     }
     document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-scrolling', 'lenis-stopped');
-    document.documentElement.style.scrollBehavior = 'auto';
-  }
-
-  var lenisRafId = null;
-
-  function initSmoothScroll() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      disableLenisScroll();
-      return;
-    }
-
-    document.documentElement.style.scrollBehavior = 'auto';
-
-    var isMobile = window.matchMedia('(max-width: 767px)').matches;
-    if (isMobile || typeof window.Lenis !== 'function') {
-      disableLenisScroll();
-      return;
-    }
-
-    disableLenisScroll();
-
-    var lenis = new window.Lenis({
-      lerp: 0.09,
-      wheelMultiplier: 0.95,
-      smoothWheel: true,
-      smoothTouch: false,
-      syncTouch: false
-    });
-
-    window.lenisInstance = lenis;
-    document.documentElement.classList.add('lenis', 'lenis-smooth');
-
-    function raf(time) {
-      lenis.raf(time);
-      lenisRafId = window.requestAnimationFrame(raf);
-    }
-    lenisRafId = window.requestAnimationFrame(raf);
-  }
-
-  function currentScrollY() {
-    if (window.lenisInstance && typeof window.lenisInstance.scroll === 'number') {
-      return window.lenisInstance.scroll;
-    }
-    return window.scrollY || 0;
-  }
-
-  function scrollToTarget(target) {
-    if (!target) return;
-    var headerOffset =
-      parseInt(getComputedStyle(document.documentElement).getPropertyValue('--kiz-header-h'), 10) || 72;
-
-    if (window.lenisInstance) {
-      window.lenisInstance.scrollTo(target, { offset: -headerOffset });
-      return;
-    }
-
-    var top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-    window.scrollTo({ top: top, behavior: 'smooth' });
+    document.documentElement.style.scrollBehavior = 'smooth';
   }
 
   function initScrollReveal() {
@@ -601,7 +466,8 @@
 
     function updateScrollState() {
       ticking = false;
-      document.body.classList.toggle('kiz-scrolled', currentScrollY() > 16);
+      var scrolled = window.scrollY > 16;
+      document.body.classList.toggle('kiz-scrolled', scrolled);
     }
 
     function onScroll() {
@@ -627,7 +493,7 @@
         var target = document.querySelector(href);
         if (!target) return;
         e.preventDefault();
-        scrollToTarget(target);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
   }
@@ -657,9 +523,6 @@
 
     function closeMobileNav() {
       html.classList.remove('mobile-nav-active');
-      if (window.lenisInstance) {
-        window.lenisInstance.start();
-      }
       document.querySelectorAll('.handheld-navigation .kiz-mobile-submenu-open').forEach(function (li) {
         li.classList.remove('kiz-mobile-submenu-open');
         var btn = li.querySelector('.kiz-mobile-submenu-toggle');
@@ -672,13 +535,6 @@
 
     function toggleMobileNav() {
       html.classList.toggle('mobile-nav-active');
-      if (window.lenisInstance) {
-        if (html.classList.contains('mobile-nav-active')) {
-          window.lenisInstance.stop();
-        } else {
-          window.lenisInstance.start();
-        }
-      }
     }
 
     document.querySelectorAll('.menu-mobile-nav-button').forEach(function (btn) {
@@ -1645,12 +1501,7 @@
   }
 
   function initPageReveal() {
-    if (document.body.classList.contains('home')) {
-      preloadHeroBackground('living', revealPage);
-      window.setTimeout(revealPage, 1600);
-      return;
-    }
-    window.setTimeout(revealPage, 600);
+    window.setTimeout(revealPage, 2200);
   }
 
   function init() {
@@ -1665,7 +1516,7 @@
     initAllHeroSliders();
     disableJarallax();
     disableMotionEffects();
-    initSmoothScroll();
+    disableLenisScroll();
     initScrollReveal();
     initHeaderScroll();
     initSmoothAnchors();
@@ -1698,7 +1549,7 @@
     disableStickySpacers();
     applySiteHeader();
     fixPageScroll();
-    initSmoothScroll();
+    disableLenisScroll();
     disableJarallax();
     disableMotionEffects();
     fixHeroBackgrounds();
