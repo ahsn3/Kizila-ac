@@ -743,65 +743,51 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 }
 
 #colophon .elementor-element-74819730 .e-con-inner {
+  display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
   flex-direction: row !important;
+  flex-wrap: nowrap !important;
   gap: 16px !important;
+  width: 100% !important;
+  max-width: min(1200px, 92vw) !important;
+  margin: 0 auto !important;
 }
 
 #colophon .elementor-element-473d67e2 {
   flex: 1 1 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
   min-width: 0 !important;
+  display: block !important;
 }
 
-#colophon .elementor-element-2cb0922e {
-  flex: 0 0 auto !important;
+#colophon .elementor-element-473d67e2 > .e-con-inner,
+#colophon .elementor-element-473d67e2 .elementor-widget-container,
+#colophon .elementor-element-473d67e2 .ekit-heading,
+#colophon .elementor-element-473d67e2 .ekit-wid-con {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
+#colophon .elementor-element-2cb0922e,
 #colophon .elementor-element-6b14c558 {
-  display: flex !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-}
-
-#colophon .elementor-element-6b14c558 .elementor-social-icons-wrapper {
-  display: flex !important;
-  justify-content: flex-end !important;
-  gap: 8px !important;
-}
-
-#colophon .elementor-element-6b14c558 .elementor-social-icon {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
-  color: #fff !important;
-  border-radius: 50% !important;
-  width: 44px !important;
-  height: 44px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 20px !important;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 4px 14px rgba(188, 24, 136, 0.35);
-}
-
-#colophon .elementor-element-6b14c558 .elementor-social-icon svg {
-  width: 20px !important;
-  height: 20px !important;
-  fill: #fff !important;
-}
-
-#colophon .elementor-element-6b14c558 .elementor-social-icon:hover {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(188, 24, 136, 0.45);
+  display: none !important;
 }
 
 #colophon {
-  padding-bottom: 80px !important;
+  padding-bottom: 24px !important;
+}
+
+@media (max-width: 767px) {
+  #colophon {
+    padding-bottom: 80px !important;
+  }
 }
 
 .kiz-footer-instagram {
-  display: none;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -833,12 +819,18 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 
 #colophon .elementor-element-5d5b5d46 .ekit-heading,
 #colophon .elementor-element-5d5b5d46 .ekit-heading--title {
-  text-align: left !important;
+  text-align: center !important;
   color: rgba(255, 255, 255, 0.85) !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   letter-spacing: 0.02em;
   margin: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  line-height: 1.5 !important;
 }
 
 #colophon .elementor-element-5d5b5d46 a {
@@ -849,6 +841,22 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 
 .hfe-reading-progress-bar {
   display: none !important;
+}
+
+/* WhatsApp floating button — icon only, no label */
+.wa__btn_popup_txt,
+.wa__btn_txt,
+.wa__btn_title,
+.wa__button_text_only {
+  display: none !important;
+}
+
+.wa__btn_popup {
+  width: auto !important;
+}
+
+.wa__btn_popup .wa__btn_popup_icon {
+  margin: 0 !important;
 }
 
 /* ---- Site header / navbar (elementor-10968) ---- */
@@ -1678,19 +1686,11 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
   #colophon .elementor-element-5d5b5d46 .ekit-heading--title {
     font-size: 12px !important;
     line-height: 1.45 !important;
-    text-align: left !important;
-  }
-
-  .kiz-footer-instagram {
-    display: inline-flex !important;
+    text-align: center !important;
   }
 
   #colophon .elementor-element-74819730 .e-con-inner {
     padding-left: 16px !important;
     padding-right: 16px !important;
-  }
-
-  #colophon .elementor-element-6b14c558 {
-    display: none !important;
   }
 }

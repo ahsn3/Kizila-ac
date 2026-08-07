@@ -542,13 +542,14 @@
       bottomBar.style.setProperty('display', 'flex', 'important');
       bottomBar.style.setProperty('flex-direction', 'row', 'important');
       bottomBar.style.setProperty('align-items', 'center', 'important');
-      bottomBar.style.setProperty('justify-content', 'space-between', 'important');
-      bottomBar.style.setProperty('gap', '12px', 'important');
+      bottomBar.style.setProperty('justify-content', 'center', 'important');
+      bottomBar.style.setProperty('width', '100%', 'important');
     }
+  }
 
-    footer.querySelectorAll('.elementor-element-6b14c558 .elementor-social-icon').forEach(function (icon) {
-      icon.style.setProperty('width', '44px', 'important');
-      icon.style.setProperty('height', '44px', 'important');
+  function fixWhatsAppButton() {
+    document.querySelectorAll('.wa__btn_popup_txt, .wa__btn_txt, .wa__btn_title').forEach(function (el) {
+      el.remove();
     });
   }
 
@@ -761,6 +762,7 @@
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
+    fixWhatsAppButton();
     fixMobileHeader();
     removeScrollToTop();
   }
@@ -785,11 +787,14 @@
     fixHeader();
     fixInnerPageHeroes();
     fixFooter();
+    fixWhatsAppButton();
     fixMobileHeader();
     removeScrollToTop();
     window.setTimeout(fixPageScroll, 250);
     window.setTimeout(applySiteHeader, 250);
     window.setTimeout(fixMobileHeader, 250);
+    window.setTimeout(fixWhatsAppButton, 400);
+    window.setTimeout(fixWhatsAppButton, 1200);
     window.setTimeout(forceHeroTextWhite, 100);
     window.setTimeout(forceHeroTextWhite, 500);
     window.setTimeout(function () {
