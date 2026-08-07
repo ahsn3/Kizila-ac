@@ -151,6 +151,140 @@
     bedroom: 'hero-background/hero-bedroom.png'
   };
 
+  var SERVICE_PHOTOS = {
+    'mimarlik-hizmetleri': 'architecture-services.png',
+    'architecture-services': 'architecture-services.png',
+    'ic-mimarlik-dekorasyon': 'interior-architecture-decoration.png',
+    'interior-architecture-decoration': 'interior-architecture-decoration.png',
+    'uygulama-tadilat': 'application-renovation.png',
+    'application-renovation': 'application-renovation.png',
+    'proje-yonetimi-danismanlik': 'project-management-consulting.png',
+    'project-management-consultancy': 'project-management-consulting.png',
+    'ucretsiz-kesif': 'free-discovery.png',
+    'free-exploration': 'free-discovery.png',
+    'cephe-dis-mekan-tasarimi': 'facade-exterior-design.png',
+    'facade-exterior-design': 'facade-exterior-design.png'
+  };
+
+  var SERVICE_SLUG_ORDER_TR = [
+    'mimarlik-hizmetleri',
+    'ic-mimarlik-dekorasyon',
+    'uygulama-tadilat',
+    'proje-yonetimi-danismanlik',
+    'ucretsiz-kesif',
+    'cephe-dis-mekan-tasarimi'
+  ];
+
+  var SERVICE_SLUG_ORDER_EN = [
+    'architecture-services',
+    'interior-architecture-decoration',
+    'application-renovation',
+    'project-management-consultancy',
+    'free-exploration',
+    'facade-exterior-design'
+  ];
+
+  var LEGACY_SERVICE_IMAGES = {
+    'Adsiz-tasarim-3.png': 'architecture-services.png',
+    'Adsiz-tasarim-4.png': 'interior-architecture-decoration.png',
+    'Adsiz-tasarim-2.png': 'project-management-consulting.png',
+    'Adsiz-tasarim-5.png': 'free-discovery.png',
+    'Adsiz-tasarim-6.png': 'facade-exterior-design.png',
+    'Adsiz-tasarim.png': 'application-renovation.png'
+  };
+
+  function servicePhotoUrl(slug) {
+    var file = SERVICE_PHOTOS[slug];
+    if (!file) return '';
+    return siteRootPrefix() + 'services-photos/' + file;
+  }
+
+  function serviceSlugFromHref(href) {
+    if (!href) return '';
+    var match = href.match(/service\/([^/?#]+)/);
+    return match ? match[1] : '';
+  }
+
+  function applyServicePhotoToImg(img, slug) {
+    var url = servicePhotoUrl(slug);
+    if (!url || !img) return;
+    img.setAttribute('src', url);
+    img.removeAttribute('srcset');
+    img.removeAttribute('sizes');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+  }
+
+  function applyServicePhotos() {
+    var isEn = (window.location.pathname || '').indexOf('/en/') !== -1;
+    var order = isEn ? SERVICE_SLUG_ORDER_EN : SERVICE_SLUG_ORDER_TR;
+    var root = siteRootPrefix();
+    var pathSlug = serviceSlugFromHref(window.location.pathname);
+
+    document.querySelectorAll('a[href*="service/"]').forEach(function (a) {
+      var slug = serviceSlugFromHref(a.getAttribute('href'));
+      if (!SERVICE_PHOTOS[slug]) return;
+
+      var img = a.querySelector('img');
+      if (img) {
+        applyServicePhotoToImg(img, slug);
+        return;
+      }
+
+      var block = a.closest('.service-block, .antra-item.service, li.service');
+      if (block) {
+        img = block.querySelector('.service-image img, .post-thumbnail img');
+        if (img) applyServicePhotoToImg(img, slug);
+      }
+    });
+
+    if (SERVICE_PHOTOS[pathSlug]) {
+      document.querySelectorAll('.elementor-post-thumbnail img').forEach(function (img) {
+        applyServicePhotoToImg(img, pathSlug);
+      });
+    }
+
+    document
+      .querySelectorAll('.elementor-service-style-accordion .antra-item.service, .hizmetler .antra-item.service')
+      .forEach(function (item, index) {
+        var slug = order[index];
+        if (!slug) return;
+
+        var img = item.querySelector('.service-image img, .post-thumbnail img');
+        if (img) applyServicePhotoToImg(img, slug);
+
+        var link = item.querySelector('.service-image a, .post-thumbnail a');
+        if (link) {
+          var href = link.getAttribute('href') || '';
+          if (!href || href === '#') {
+            link.setAttribute('href', root + (isEn ? 'en/' : '') + 'service/' + slug + '/index.html');
+          }
+        }
+      });
+
+    document.querySelectorAll('.service-image img, .antra-item.service img, .post-thumbnail.service-image img').forEach(function (img) {
+      var src = img.getAttribute('src') || '';
+      if (src.indexOf('services-photos/') !== -1) return;
+
+      Object.keys(LEGACY_SERVICE_IMAGES).forEach(function (legacy) {
+        if (src.indexOf(legacy) === -1) return;
+        img.setAttribute('src', root + 'services-photos/' + LEGACY_SERVICE_IMAGES[legacy]);
+        img.removeAttribute('srcset');
+        img.removeAttribute('sizes');
+      });
+
+      if (/placeholder\.jpg/i.test(src)) {
+        var card = img.closest('.antra-item.service, .service-block');
+        if (!card) return;
+        var items = Array.prototype.slice.call(
+          document.querySelectorAll('.elementor-service-style-accordion .antra-item.service')
+        );
+        var idx = items.indexOf(card);
+        if (idx >= 0 && order[idx]) applyServicePhotoToImg(img, order[idx]);
+      }
+    });
+  }
+
   function heroBgUrl(key) {
     return siteRootPrefix() + HERO_BG[key];
   }
@@ -1049,6 +1183,7 @@
     fixPageScroll();
     fixHeroBackgrounds();
     applyModernHeroBackgrounds();
+    applyServicePhotos();
     injectHomeHeroCtas();
     forceHeroTextWhite();
     initAllHeroSliders();
@@ -1089,6 +1224,7 @@
     disableMotionEffects();
     fixHeroBackgrounds();
     applyModernHeroBackgrounds();
+    applyServicePhotos();
     injectHomeHeroCtas();
     forceHeroTextWhite();
     fixHeader();
