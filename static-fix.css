@@ -711,6 +711,10 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
   height: 100%;
 }
 
+body.home .kiz-hero-swipe-zone {
+  display: none;
+}
+
 @media (max-width: 778px) {
   #SR7_1_1-3-2,
   #SR7_1_1-3-3,
@@ -2047,9 +2051,26 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
   }
 
   body.home sr7-slide.sr7-static-active a.sr7-layer,
+  body.home .kiz-hero-actions,
+  body.home .kiz-hero-actions a,
   body.home .sr7-static-nav,
   body.home .sr7-static-nav button {
     pointer-events: auto !important;
+  }
+
+  body.home .kiz-hero-swipe-zone {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: auto !important;
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html.mobile-nav-active body.home .kiz-hero-swipe-zone {
+    pointer-events: none !important;
   }
 
   #content.site-content {

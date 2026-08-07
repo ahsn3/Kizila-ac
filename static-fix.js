@@ -36,6 +36,12 @@
     var timer = null;
     var transitioning = false;
     var touchStartX = 0;
+    var touchStartY = 0;
+
+    var swipeZone = document.createElement('div');
+    swipeZone.className = 'kiz-hero-swipe-zone';
+    swipeZone.setAttribute('aria-hidden', 'true');
+    module.insertBefore(swipeZone, module.firstChild);
 
     var nav = document.createElement('div');
     nav.className = 'sr7-static-nav';
@@ -104,7 +110,10 @@
     module.addEventListener(
       'touchstart',
       function (e) {
-        touchStartX = e.changedTouches[0].clientX;
+        if (window.matchMedia('(max-width: 767px)').matches) return;
+        if (!e.touches[0]) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
       },
       { passive: true }
     );
@@ -112,11 +121,36 @@
     module.addEventListener(
       'touchend',
       function (e) {
-        var dx = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(dx) < 40) return;
-        if (dx < 0) goTo(current + 1, true);
-        else goTo(current - 1, true);
-        restartAutoplay();
+        if (window.matchMedia('(max-width: 767px)').matches) return;
+        if (!e.changedTouches[0]) return;
+        handleHeroSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      },
+      { passive: true }
+    );
+
+    function handleHeroSwipe(endX, endY) {
+      var dx = endX - touchStartX;
+      var dy = endY - touchStartY;
+      if (Math.abs(dx) < 48) return;
+      if (Math.abs(dx) < Math.abs(dy)) return;
+      if (dx < 0) goTo(current + 1, true);
+      else goTo(current - 1, true);
+      restartAutoplay();
+    }
+
+    swipeZone.addEventListener(
+      'touchstart',
+      function (e) {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+      },
+      { passive: true }
+    );
+
+    swipeZone.addEventListener(
+      'touchend',
+      function (e) {
+        handleHeroSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
       },
       { passive: true }
     );
