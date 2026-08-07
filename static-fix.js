@@ -242,11 +242,18 @@
 
     scrollRoots.forEach(function (selector) {
       document.querySelectorAll(selector).forEach(function (el) {
+        if (document.body.classList.contains('home') && el.matches('.col-full, [data-elementor-type="wp-page"], .elementor-page')) {
+          return;
+        }
         el.style.setProperty('overflow', 'visible', 'important');
         el.style.setProperty('max-height', 'none', 'important');
         el.style.setProperty('height', 'auto', 'important');
       });
     });
+
+    if (document.body.classList.contains('home')) {
+      fixHomeFullBleed();
+    }
 
     document.querySelectorAll('.elementor-widget-antra-services-accordion .elementor-widget-container').forEach(function (el) {
       el.style.setProperty('height', 'auto', 'important');
@@ -255,6 +262,30 @@
     });
 
     disableStickySpacers();
+  }
+
+  function fixHomeFullBleed() {
+    document.querySelectorAll('.col-full').forEach(function (el) {
+      el.style.setProperty('max-width', 'none', 'important');
+      el.style.setProperty('width', '100%', 'important');
+      el.style.setProperty('margin', '0', 'important');
+      el.style.setProperty('padding', '0', 'important');
+    });
+
+    document.querySelectorAll('.col-full [data-elementor-type="wp-page"], .col-full .elementor-page').forEach(function (el) {
+      el.style.setProperty('width', '100%', 'important');
+      el.style.setProperty('max-width', 'none', 'important');
+      el.style.setProperty('margin-left', '0', 'important');
+      el.style.setProperty('margin-right', '0', 'important');
+      el.style.setProperty('transform', 'none', 'important');
+    });
+
+    document.querySelectorAll('sr7-module, .wp-block-themepunch-revslider, .elementor-widget-slider_revolution .elementor-widget-container').forEach(function (el) {
+      el.style.setProperty('width', '100%', 'important');
+      el.style.setProperty('max-width', 'none', 'important');
+      el.style.setProperty('margin-left', '0', 'important');
+      el.style.setProperty('margin-right', '0', 'important');
+    });
   }
 
   function disableMotionEffects() {

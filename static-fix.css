@@ -29,6 +29,52 @@ body {
   transform: none;
 }
 
+/* Homepage: full-bleed header + hero (theme .col-full caps at 1410px) */
+body.home .col-full {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.home .col-full [data-elementor-type="wp-page"],
+body.home .col-full .elementor-page {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  transform: none !important;
+}
+
+body.home .elementor-location-header,
+body.home .elementor-10968,
+body.home .elementor-10968 .elementor-element-bf83e51,
+body.home .elementor-10968 .elementor-element-b145162 {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+body.home .elementor-10968 .elementor-element-bf83e51 > .e-con-inner,
+body.home .elementor-10968 .elementor-element-b145162 > .e-con-inner {
+  width: 100% !important;
+  max-width: min(1320px, calc(100% - 60px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.home .elementor-element-f98ed7f,
+body.home .elementor-element-f98ed7f > .e-con-inner,
+body.home .elementor-widget-slider_revolution,
+body.home .elementor-widget-slider_revolution .elementor-widget-container,
+body.home .wp-block-themepunch-revslider {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 /* Single document scroll — html scrolls, body grows; no nested scroll traps */
 html {
   overflow-x: hidden !important;
@@ -181,6 +227,7 @@ sr7-module.rs-ov-hidden {
   display: block !important;
   position: relative !important;
   width: 100% !important;
+  max-width: none !important;
   min-height: clamp(520px, 100vh, 910px) !important;
   height: clamp(520px, 100vh, 910px) !important;
   overflow: hidden !important;
@@ -728,6 +775,7 @@ body.home .elementor-10968 .elementor-element-bf83e51 {
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
+  width: 100% !important;
   background-color: rgba(242, 240, 235, 0.92) !important;
 }
 
