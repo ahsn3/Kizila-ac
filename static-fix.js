@@ -361,6 +361,17 @@
     document.querySelectorAll('#page > .footer-width-fixer').forEach(function (el) {
       el.remove();
     });
+
+    footer.querySelectorAll('.elementskit-infobox, .ekit-wid-con, .elementor-widget-container, .elementskit-box-header, .elementskit-info-box-icon').forEach(function (el) {
+      el.style.setProperty('background', 'transparent', 'important');
+      el.style.setProperty('background-color', 'transparent', 'important');
+      el.style.setProperty('box-shadow', 'none', 'important');
+    });
+
+    footer.querySelectorAll('.elementor-element-48d6ff42, .elementor-element-1ed1b81d').forEach(function (col) {
+      col.style.setProperty('display', 'flex', 'important');
+      col.style.setProperty('visibility', 'visible', 'important');
+    });
   }
 
   /* ---- SR7 path patches ---- */

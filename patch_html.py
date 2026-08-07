@@ -12,6 +12,11 @@ def depth_rel(from_dir):
     return "../" * depth + "static-fix.js" if depth else "static-fix.js"
 
 
+def wp_prefix(from_dir):
+    depth = len(from_dir.relative_to(ROOT).parts)
+    return "../" * depth if depth else ""
+
+
 def fix_slider_noscript(text):
     def repl(m):
         src = m.group(1)
@@ -54,12 +59,30 @@ def patch_file(fpath):
 
     rel = depth_rel(fpath.parent)
     css_rel = rel.replace("static-fix.js", "static-fix.css")
-    text = re.sub(r'<link[^>]*href=["\'][^"\']*static-fix\.css["\'][^>]*>\s*', "", text, flags=re.I)
-    if "</head>" in text:
-        text = text.replace("</head>", f'<link rel="stylesheet" href="{css_rel}" />\n</head>', 1)
+    prefix = wp_prefix(fpath.parent)
 
-    if "</body>" in text:
-        text = text.replace("</body>", f'<script src="{rel}"></script>\n</body>', 1)
+    text = re.sub(r'<link[^>]*href=["\'][^"\']*static-fix\.css["\'][^>]*>\s*', "", text, flags=re.I)
+
+    if ('id="colophon"' in text or "id='colophon'" in text) and "post-46.css" not in text:
+        post46 = (
+            f"<link rel='stylesheet' id='elementor-post-46-css' "
+            f"href='{prefix}wp-content/uploads/elementor/css/post-46.css' media='all' />"
+        )
+        if "</head>" in text:
+            text = text.replace("</head>", f"{post46}\n</head>", 1)
+
+    css_tag = f'<link rel="stylesheet" href="{css_rel}" />\n'
+    js_tag = f'<script src="{rel}"></script>\n'
+
+    if f'src="{rel}"' in text:
+        text = re.sub(
+            rf'(<script src="{re.escape(rel)}"></script>)',
+            css_tag + r"\1",
+            text,
+            count=1,
+        )
+    elif "</body>" in text:
+        text = text.replace("</body>", css_tag + js_tag + "</body>", 1)
 
     if text != orig:
         fpath.write_text(text, encoding="utf-8")

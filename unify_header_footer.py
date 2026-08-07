@@ -58,27 +58,30 @@ def strip_active_menu(html: str) -> str:
 
 
 def fix_head_css(text: str, prefix: str) -> str:
-    css_path = f"{prefix}wp-content/uploads/elementor/css/post-10968.css"
     text = re.sub(
         r"<link[^>]*id=['\"]elementor-post-11098-css['\"][^>]*>",
         "",
         text,
         flags=re.I,
     )
-    if "post-10968.css" not in text:
-        link = (
-            f"<link rel='stylesheet' id='elementor-post-10968-css' "
-            f"href='{css_path}' media='all' />"
-        )
-        text = text.replace("</head>", f"{link}\n</head>", 1)
-    else:
-        text = re.sub(
-            r"(<link[^>]*id=['\"]elementor-post-10968-css['\"][^>]*href=['\"])[^'\"]+(['\"])",
-            rf"\1{css_path}\2",
-            text,
-            count=1,
-            flags=re.I,
-        )
+
+    for post_id, css_name in (("10968", "post-10968.css"), ("46", "post-46.css")):
+        css_path = f"{prefix}wp-content/uploads/elementor/css/{css_name}"
+        link_id = f"elementor-post-{post_id}-css"
+        if css_name not in text:
+            link = (
+                f"<link rel='stylesheet' id='{link_id}' "
+                f"href='{css_path}' media='all' />"
+            )
+            text = text.replace("</head>", f"{link}\n</head>", 1)
+        else:
+            text = re.sub(
+                rf"(<link[^>]*id=['\"]{link_id}['\"][^>]*href=['\"])[^'\"]+(['\"])",
+                rf"\1{css_path}\2",
+                text,
+                count=1,
+                flags=re.I,
+            )
     return text
 
 

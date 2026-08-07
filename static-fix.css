@@ -1007,3 +1007,42 @@ body:not(.home) .elementor-element-4a935a {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+/* Footer final overrides — wins over late-loaded widget CSS on hizmetler/iletisim */
+#colophon .elementor-element-48d6ff42.elementor-hidden-mobile,
+#colophon .elementor-element-48d6ff42.elementor-hidden-tablet,
+#colophon .elementor-element-48d6ff42.elementor-hidden-tablet_extra,
+#colophon .elementor-element-48d6ff42.elementor-hidden-mobile_extra,
+#colophon .elementor-element-1ed1b81d.elementor-hidden-mobile,
+#colophon .elementor-element-1ed1b81d.elementor-hidden-tablet,
+#colophon .elementor-element-1ed1b81d.elementor-hidden-tablet_extra,
+#colophon .elementor-element-1ed1b81d.elementor-hidden-mobile_extra,
+#colophon .elementor-element-1ed1b81d .elementor-widget-elementskit-icon-box.elementor-hidden-mobile,
+#colophon .elementor-element-1ed1b81d .elementor-widget-elementskit-icon-box.elementor-hidden-tablet {
+  display: flex !important;
+  visibility: visible !important;
+}
+
+#colophon .elementor-element-1ed1b81d .elementskit-infobox,
+#colophon .elementor-element-1ed1b81d .elementskit-infobox.media,
+#colophon .elementor-element-1ed1b81d .elementskit-box-header,
+#colophon .elementor-element-1ed1b81d .elementskit-info-box-icon,
+#colophon .elementor-element-1ed1b81d .box-body,
+#colophon .elementor-element-1ed1b81d .ekit-wid-con,
+#colophon .elementor-element-1ed1b81d .elementor-widget-container,
+#colophon .elementor-widget-elementskit-icon-box .elementor-widget-container {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+#colophon .elementor-element-18dd84e3,
+#colophon .elementor-element-18dd84e3 > .e-con-inner {
+  overflow: visible !important;
+}
+
+#colophon .elementor-element-74819730 {
+  display: flex !important;
+  width: 100% !important;
+}
