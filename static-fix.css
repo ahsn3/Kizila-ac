@@ -1,6 +1,6 @@
 /* Static site fixes for Kızılağaç İnşaat clone */
 
-/* Hide overlays that block content on static hosting */
+/* ---- Overlays ---- */
 .antra-overlay,
 .site-search-popup-overlay,
 .site-search-popup:not(.active) {
@@ -8,15 +8,48 @@
   pointer-events: none !important;
 }
 
-/* RevSlider static fallback */
+/* ---- Smooth scrolling & performance ---- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html:not(.lenis) {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+}
+
+/* Disable heavy parallax on static hosting */
+[data-jarallax],
+[data-jarallax-element],
+.jarallax,
+.jarallax-img {
+  transform: none !important;
+  will-change: auto !important;
+}
+
+.elementor-motion-effects-element,
+.elementor-element {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- RevSlider static hero ---- */
 sr7-module,
 sr7-module.rs-ov-hidden {
   display: block !important;
-  min-height: 774px !important;
-  height: 774px !important;
   position: relative !important;
-  overflow: hidden !important;
   width: 100% !important;
+  min-height: clamp(520px, 100vh, 910px) !important;
+  height: clamp(520px, 100vh, 910px) !important;
+  overflow: hidden !important;
+  background: #111;
+  contain: layout style paint;
 }
 
 sr7-adjuster {
@@ -26,39 +59,36 @@ sr7-adjuster {
 sr7-content {
   display: block !important;
   position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+  inset: 0 !important;
   width: 100% !important;
-  height: 774px !important;
+  height: 100% !important;
+  overflow: hidden !important;
 }
 
 sr7-slide {
   display: block !important;
   position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+  inset: 0 !important;
   width: 100% !important;
-  height: 774px !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.8s cubic-bezier(0.22, 1, 0.36, 1) !important;
   transform: none !important;
 }
 
-sr7-slide:first-of-type {
+sr7-slide.sr7-static-active {
   opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
   z-index: 2 !important;
-  visibility: visible !important;
 }
 
-sr7-slide:not(:first-of-type) {
-  opacity: 0 !important;
-  z-index: 1 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-sr7-bg,
-sr7-txt,
-sr7-bg + a {
-  visibility: visible !important;
+sr7-slide.sr7-static-empty {
+  display: none !important;
 }
 
 sr7-bg {
@@ -68,6 +98,13 @@ sr7-bg {
   width: 100% !important;
   height: 100% !important;
   overflow: hidden !important;
+  z-index: 0 !important;
+  transform: scale(1);
+  transition: transform 8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+sr7-slide.sr7-static-active sr7-bg {
+  transform: scale(1.04);
 }
 
 sr7-bg img {
@@ -78,7 +115,238 @@ sr7-bg img {
 }
 
 sr7-txt,
-sr7-bg + a {
-  position: relative !important;
+sr7-slide a.sr7-layer {
+  display: block !important;
+  position: absolute !important;
+  visibility: visible !important;
   z-index: 10 !important;
+  margin: 0 !important;
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+sr7-slide.sr7-static-active sr7-txt,
+sr7-slide.sr7-static-active a.sr7-layer {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+sr7-slide.sr7-static-active sr7-txt:nth-of-type(1),
+sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(1) {
+  transition-delay: 0.08s;
+}
+
+sr7-slide.sr7-static-active sr7-txt:nth-of-type(2),
+sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(2) {
+  transition-delay: 0.18s;
+}
+
+sr7-slide.sr7-static-active sr7-txt:nth-of-type(3),
+sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
+  transition-delay: 0.28s;
+}
+
+/* Slide 3 – main hero copy */
+#SR7_1_1-3-2 {
+  left: clamp(16px, 11vw, 210px);
+  top: clamp(180px, 31vh, 280px);
+  max-width: min(92vw, 1327px);
+  font-family: Poppins, sans-serif;
+  font-size: clamp(24px, 4.2vw, 77px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-align: left;
+}
+
+#SR7_1_1-3-3 {
+  left: clamp(16px, 11.2vw, 215px);
+  top: clamp(280px, 49vh, 475px);
+  max-width: min(88vw, 856px);
+  font-family: Roboto, sans-serif;
+  font-size: clamp(13px, 1.05vw, 20px);
+  font-weight: 400;
+  line-height: 1.35;
+  color: #fff;
+  text-align: left;
+}
+
+#SR7_1_1-3-10 {
+  left: clamp(16px, 11vw, 210px);
+  top: clamp(140px, 25vh, 230px);
+  display: inline-flex !important;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 22px 6px 34px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  font-family: "Chocolate Classical Sans", sans-serif;
+  font-size: clamp(9px, 0.75vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+#SR7_1_1-3-10::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff2b2b;
+  transform: translateY(-50%);
+}
+
+/* Slide 1 & 6 – service slides */
+#SR7_1_1-1-13,
+#SR7_1_1-6-15 {
+  left: clamp(16px, 11vw, 213px);
+  max-width: min(90vw, 777px);
+  font-family: Poppins, sans-serif;
+  font-size: clamp(28px, 4.2vw, 77px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-align: left;
+}
+
+#SR7_1_1-1-13 {
+  top: clamp(220px, 48vh, 435px);
+}
+
+#SR7_1_1-6-15 {
+  top: clamp(240px, 53vh, 485px);
+}
+
+#SR7_1_1-1-14,
+#SR7_1_1-6-16 {
+  left: clamp(16px, 11vw, 211px);
+  top: clamp(320px, 66vh, 635px);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 45px;
+  padding: 0 27px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-family: Roboto, sans-serif;
+  font-size: clamp(14px, 0.95vw, 18px);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: #fff !important;
+  text-decoration: none !important;
+  background: transparent;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+#SR7_1_1-1-14:hover,
+#SR7_1_1-6-16:hover {
+  background: rgba(166, 38, 38, 0.85);
+  border-color: rgba(166, 38, 38, 0.85);
+  color: #fff !important;
+}
+
+/* Hero bullets */
+.sr7-static-nav {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.sr7-static-bullet {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.sr7-static-bullet::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  background: #fff;
+  transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sr7-static-bullet.is-active::after {
+  height: 100%;
+}
+
+@media (max-width: 778px) {
+  #SR7_1_1-3-2,
+  #SR7_1_1-3-3,
+  #SR7_1_1-3-10,
+  #SR7_1_1-1-13,
+  #SR7_1_1-1-14,
+  #SR7_1_1-6-15,
+  #SR7_1_1-6-16 {
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    text-align: center;
+  }
+
+  sr7-slide.sr7-static-active #SR7_1_1-3-2,
+  sr7-slide.sr7-static-active #SR7_1_1-3-3,
+  sr7-slide.sr7-static-active #SR7_1_1-3-10,
+  sr7-slide.sr7-static-active #SR7_1_1-1-13,
+  sr7-slide.sr7-static-active #SR7_1_1-1-14,
+  sr7-slide.sr7-static-active #SR7_1_1-6-15,
+  sr7-slide.sr7-static-active #SR7_1_1-6-16 {
+    transform: translate3d(-50%, 0, 0) !important;
+  }
+
+  #SR7_1_1-3-10 {
+    transform: translateX(-50%);
+  }
+
+  sr7-slide.sr7-static-active #SR7_1_1-3-10 {
+    transform: translate3d(-50%, 0, 0) !important;
+  }
+
+  #SR7_1_1-1-14,
+  #SR7_1_1-6-16 {
+    transform: translateX(-50%);
+  }
+
+  sr7-slide.sr7-static-active #SR7_1_1-1-14,
+  sr7-slide.sr7-static-active #SR7_1_1-6-16 {
+    transform: translate3d(-50%, 0, 0) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  sr7-slide,
+  sr7-bg,
+  sr7-txt,
+  sr7-slide a.sr7-layer,
+  .sr7-static-bullet::after {
+    transition: none !important;
+  }
+
+  sr7-slide.sr7-static-active sr7-bg {
+    transform: none;
+  }
 }

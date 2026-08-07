@@ -43,11 +43,23 @@ def patch_file(fpath):
     text = text.replace('"//kizilagacinsaat.com/wp-content/plugins/revslider/', '"wp-content/plugins/revslider/')
     text = text.replace('"\\/\\/kizilagacinsaat.com\\/wp-content\\/plugins\\/revslider/', '"wp-content/plugins/revslider/')
 
-    # Remove duplicate static-fix tags
+    # Remove duplicate static-fix tags and corrupted trailing markup
     text = re.sub(r'(<script src="[^"]*static-fix\.js"></script>\s*)+', '', text)
+    text = re.sub(
+        r'</body>\s*</html>\s*(?:<script[^>]*static-fix\.js[^>]*>\s*</script>\s*</body>\s*</html>\s*)+',
+        '</body>\n</html>\n',
+        text,
+        flags=re.I,
+    )
+
     rel = depth_rel(fpath.parent)
+    css_rel = rel.replace("static-fix.js", "static-fix.css")
+    if "static-fix.css" not in text and css_rel not in text:
+        if "</head>" in text:
+            text = text.replace("</head>", f'<link rel="stylesheet" href="{css_rel}" />\n</head>', 1)
+
     if "</body>" in text:
-        text = text.replace("</body>", f'<script src="{rel}"></script>\n</body>')
+        text = text.replace("</body>", f'<script src="{rel}"></script>\n</body>', 1)
 
     if text != orig:
         fpath.write_text(text, encoding="utf-8")
