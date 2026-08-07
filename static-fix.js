@@ -164,6 +164,8 @@
   }
 
   function applyModernHeroBackgrounds() {
+    if (!document.body.classList.contains('home')) return;
+
     var map = {
       'SR7_1_1-3-12': 'living',
       'SR7_1_1-1-15': 'kitchen',
@@ -207,20 +209,6 @@
     wrap.appendChild(primary);
     wrap.appendChild(ghost);
     slide.appendChild(wrap);
-  }
-
-  function pageHeroImageKey() {
-    var path = (window.location.pathname || '').toLowerCase();
-    if (path.indexOf('projeler') !== -1 || path.indexOf('project') !== -1 || path.indexOf('galeri') !== -1) {
-      return 'living';
-    }
-    if (path.indexOf('hizmet') !== -1 || path.indexOf('service') !== -1 || path.indexOf('mimari') !== -1) {
-      return 'kitchen';
-    }
-    if (path.indexOf('hakk') !== -1 || path.indexOf('about') !== -1 || path.indexOf('vizyon') !== -1 || path.indexOf('ekib') !== -1) {
-      return 'bedroom';
-    }
-    return 'living';
   }
 
   function disableLenisScroll() {
@@ -348,10 +336,10 @@
 
     var header = document.querySelector('.elementor-location-header');
     if (header) {
-      header.style.setProperty('position', 'fixed', 'important');
-      header.style.setProperty('top', '0', 'important');
-      header.style.setProperty('left', '0', 'important');
-      header.style.setProperty('right', '0', 'important');
+      header.style.setProperty('position', 'relative', 'important');
+      header.style.setProperty('top', 'auto', 'important');
+      header.style.setProperty('left', 'auto', 'important');
+      header.style.setProperty('right', 'auto', 'important');
       header.style.setProperty('width', '100%', 'important');
       header.style.setProperty('z-index', '1000', 'important');
       header.style.setProperty('margin', '0', 'important');
@@ -642,14 +630,8 @@
       first.classList.add('kiz-page-hero');
       first.classList.remove('kiz-page-hero-solid');
     } else {
-      setBgImage(first, heroBgUrl(pageHeroImageKey()));
-      first.classList.add('kiz-page-hero');
-      first.classList.remove('kiz-page-hero-solid');
-      hasBg = true;
-    }
-
-    if (hasBg && !first.style.position) {
-      first.style.position = 'relative';
+      first.classList.add('kiz-page-hero-solid');
+      first.classList.remove('kiz-page-hero');
     }
 
     document.querySelectorAll('#content .e-con.e-parent').forEach(function (el, index) {

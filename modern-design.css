@@ -2,8 +2,9 @@
 
 /* ---- Homepage hero (centered, mockup-style) ---- */
 body.home sr7-module {
-  min-height: clamp(560px, 92vh, 820px) !important;
-  height: clamp(560px, 92vh, 820px) !important;
+  min-height: calc(100svh - var(--kiz-header-h, 72px)) !important;
+  height: calc(100svh - var(--kiz-header-h, 72px)) !important;
+  max-height: calc(100svh - var(--kiz-header-h, 72px)) !important;
 }
 
 body.home sr7-module::after {
