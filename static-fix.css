@@ -1048,12 +1048,18 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
   .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a {
     color: #1c1c1d !important;
     font-size: 15px !important;
+    font-weight: 500 !important;
     white-space: nowrap !important;
+    text-decoration: none !important;
   }
 
-  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a:hover,
-  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-item > a {
-    color: #a62626 !important;
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li > a:hover {
+    color: var(--kiz-brand, #a62626) !important;
+  }
+
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current-menu-item > a,
+  .elementor-10968 .elementor-element-5405242 .main-navigation .menu > li.current_page_item > a {
+    color: #fff !important;
   }
 
   .elementor-10968 .elementor-element-5405242 .main-navigation .sub-menu {
@@ -1276,31 +1282,59 @@ body:not(.home) .elementor-10968 .elementor-element-b145162 {
     backdrop-filter var(--kiz-transition);
 }
 
-/* Nav link underline */
+/* Modern desktop nav — soft red pill highlight, no underlines */
 @media (min-width: 768px) {
-  .elementor-10968 .main-navigation .menu > li > a {
-    position: relative;
-    transition: color var(--kiz-transition);
+  .elementor-10968 .main-navigation .menu > li > a,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item > a {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 8px 16px !important;
+    margin: 0 3px !important;
+    border-radius: 999px !important;
+    text-decoration: none !important;
+    transition: color 0.25s var(--kiz-ease), background-color 0.25s var(--kiz-ease),
+      box-shadow 0.25s var(--kiz-ease) !important;
   }
 
-  .elementor-10968 .main-navigation .menu > li > a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    width: 100%;
-    height: 2px;
-    background: var(--kiz-brand);
-    border-radius: 2px;
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform var(--kiz-transition);
+  .elementor-10968 .main-navigation .menu > li > a::after,
+  .elementor-10968 .main-navigation .menu > li > a::before {
+    display: none !important;
+    content: none !important;
   }
 
-  .elementor-10968 .main-navigation .menu > li > a:hover::after,
-  .elementor-10968 .main-navigation .menu > li.current-menu-item > a::after,
-  .elementor-10968 .main-navigation .menu > li.current_page_item > a::after {
-    transform: scaleX(1);
+  .elementor-10968 .main-navigation .menu > li > a > span::before,
+  .elementor-10968 .main-navigation .menu > li > a > span:before,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item > a > span:before {
+    display: none !important;
+    content: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .elementor-10968 .main-navigation .menu > li > a:hover,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item:hover > a {
+    color: var(--kiz-brand, #a62626) !important;
+    background-color: rgba(166, 38, 38, 0.09) !important;
+  }
+
+  .elementor-10968 .main-navigation .menu > li.current-menu-item > a,
+  .elementor-10968 .main-navigation .menu > li.current_page_item > a,
+  .elementor-10968 .main-navigation .menu > li.current-menu-ancestor > a,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-item > a,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-parent > a,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-ancestor > a {
+    color: #fff !important;
+    background-color: var(--kiz-brand, #a62626) !important;
+    box-shadow: 0 4px 14px rgba(166, 38, 38, 0.28) !important;
+  }
+
+  .elementor-10968 .main-navigation .menu > li.current-menu-item > a:hover,
+  .elementor-10968 .main-navigation .menu > li.current_page_item > a:hover,
+  .elementor-10968 .main-navigation ul.menu > li.menu-item.current-menu-item > a:hover {
+    color: #fff !important;
+    background-color: var(--kiz-brand-dark, #7a0000) !important;
+    box-shadow: 0 6px 18px rgba(166, 38, 38, 0.32) !important;
   }
 }
 
