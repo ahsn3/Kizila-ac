@@ -257,6 +257,11 @@
       a.setAttribute('href', root + 'index.html');
     });
 
+    footer.querySelectorAll('.elementor-element-1ed1b81d a.__cf_email__').forEach(function (a) {
+      a.setAttribute('href', 'mailto:info@kizilagacinsaat.com');
+      a.textContent = 'info@kizilagacinsaat.com';
+    });
+
     footer.querySelectorAll('.elementor-element-7ab684f3 a').forEach(function (a) {
       var href = a.getAttribute('href') || '';
       if (href.indexOf('anasayfa') !== -1 || href.indexOf('kizilagacinsaat.com') !== -1) {
@@ -275,6 +280,48 @@
     SR7.E.wp_plugin_url = 'wp-content/plugins/';
     SR7.E.ajaxurl = '';
     SR7.E.resturl = '';
+  }
+
+  function fixInnerPageHeroes() {
+    if (document.body.classList.contains('home')) return;
+
+    var root = siteRootPrefix();
+    var first = document.querySelector('#content .entry-content > .elementor > .e-con.e-parent');
+    if (!first) return;
+
+    first.style.setProperty('margin-top', '0', 'important');
+
+    function rewriteBg(el) {
+      var bg = getComputedStyle(el).backgroundImage;
+      if (!bg || bg === 'none') return false;
+      if (/kizilagacinsaat\.com/i.test(bg)) {
+        el.style.backgroundImage = bg.replace(/https?:\/\/kizilagacinsaat\.com\//gi, root);
+      }
+      return /url\(/i.test(getComputedStyle(el).backgroundImage);
+    }
+
+    var hasBg = rewriteBg(first);
+    if (!hasBg) {
+      var layer = first.querySelector('.elementor-motion-effects-layer');
+      if (layer) hasBg = rewriteBg(layer);
+    }
+
+    if (hasBg) {
+      first.classList.add('kiz-page-hero');
+    } else {
+      first.classList.add('kiz-page-hero-solid');
+    }
+
+    document.querySelectorAll('#content .e-con.e-parent').forEach(function (el, index) {
+      if (index === 0) return;
+      var mt = parseInt(getComputedStyle(el).marginTop, 10);
+      if (mt >= 80) {
+        el.style.setProperty('margin-top', '0', 'important');
+      }
+      rewriteBg(el);
+      var layer = el.querySelector('.elementor-motion-effects-layer');
+      if (layer) rewriteBg(layer);
+    });
   }
 
   function fixHeader() {
@@ -297,6 +344,7 @@
     disableLenisScroll();
     initScrollReveal();
     fixHeader();
+    fixInnerPageHeroes();
     fixFooter();
   }
 
@@ -306,6 +354,7 @@
     disableMotionEffects();
     fixHeroBackgrounds();
     fixHeader();
+    fixInnerPageHeroes();
     fixFooter();
   });
 

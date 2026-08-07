@@ -452,10 +452,34 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
   box-shadow: 0 -10px 36px rgba(28, 28, 29, 0.07);
   padding-top: 56px !important;
   padding-bottom: 44px !important;
+  overflow: visible !important;
 }
 
 #colophon .elementor-element-1b7cef60 {
-  gap: 48px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  gap: 32px !important;
+  width: 100% !important;
+  background: transparent !important;
+}
+
+#colophon .elementor-element-52f1016f,
+#colophon .elementor-element-48d6ff42,
+#colophon .elementor-element-1ed1b81d {
+  background: transparent !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+#colophon .elementor-element-48d6ff42,
+#colophon .elementor-element-1ed1b81d,
+#colophon .elementor-element-48d6ff42.elementor-hidden-tablet,
+#colophon .elementor-element-1ed1b81d.elementor-hidden-tablet {
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 #colophon .elementor-element-52f1016f {
@@ -551,6 +575,22 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 #colophon .elementor-element-1ed1b81d .elementskit-info-box-icon i {
   color: #a62626 !important;
   font-size: 18px !important;
+}
+
+/* Fallback when elementskit.woff is missing */
+#colophon .icon-map-marker1::before { content: "📍" !important; font-family: inherit !important; }
+#colophon .icon-phone-call1::before { content: "📞" !important; font-family: inherit !important; }
+#colophon .icon-envelope2::before { content: "✉️" !important; font-family: inherit !important; }
+
+#colophon .elementor-element-1ed1b81d .elementskit-infobox.media {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+#colophon .elementor-element-1ed1b81d .elementskit-info-box-icon {
+  flex: 0 0 auto !important;
+  line-height: 1 !important;
 }
 
 #colophon .elementor-element-74819730,
@@ -731,5 +771,79 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
 
   #colophon .elementor-element-1da91d5 {
     max-width: 90% !important;
+  }
+
+  #colophon .elementor-element-1b7cef60 {
+    flex-direction: column !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 28px !important;
+  }
+
+  #colophon .elementor-element-52f1016f,
+  #colophon .elementor-element-48d6ff42,
+  #colophon .elementor-element-1ed1b81d {
+    width: 100% !important;
+    max-width: 420px !important;
+    flex: 1 1 auto !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  #colophon .elementor-element-1ed1b81d .elementskit-infobox.media {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+/* ---- Inner pages: flush hero under navbar ---- */
+body:not(.home) #content.site-content,
+body:not(.home) #content .col-full,
+body:not(.home) #content #primary,
+body:not(.home) #content .site-main,
+body:not(.home) #content .entry-content {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+body:not(.home) #content .entry-content > .elementor > .e-con.e-parent:first-child {
+  margin-top: 0 !important;
+}
+
+body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero {
+  margin-top: 0 !important;
+  padding-top: clamp(72px, 12vw, 120px) !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  min-height: clamp(220px, 32vw, 360px) !important;
+}
+
+body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero-solid {
+  margin-top: 0 !important;
+  padding-top: clamp(48px, 8vw, 88px) !important;
+  padding-bottom: clamp(24px, 4vw, 48px) !important;
+}
+
+body:not(.home) .elementor-element-12b6bd6,
+body:not(.home) .elementor-element-f969415,
+body:not(.home) .elementor-element-4a935a {
+  margin-top: 0 !important;
+  padding-top: clamp(48px, 8vw, 88px) !important;
+}
+
+@media (min-width: 1025px) {
+  #colophon .elementor-element-48d6ff42 {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+
+  #colophon .elementor-element-1ed1b81d {
+    align-items: flex-start !important;
+  }
+
+  #colophon .elementor-element-1ed1b81d .elementskit-infobox.media {
+    justify-content: flex-start !important;
+    text-align: left !important;
   }
 }
