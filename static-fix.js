@@ -1207,9 +1207,12 @@
       if (showFooterCols) {
         col.style.setProperty('display', 'flex', 'important');
         col.style.setProperty('visibility', 'visible', 'important');
+      } else if (col.classList.contains('elementor-element-48d6ff42')) {
+        col.style.setProperty('display', 'flex', 'important');
+        col.style.setProperty('visibility', 'visible', 'important');
       } else {
-        col.style.removeProperty('display');
-        col.style.removeProperty('visibility');
+        col.style.setProperty('display', 'none', 'important');
+        col.style.setProperty('visibility', 'hidden', 'important');
       }
     });
   }
