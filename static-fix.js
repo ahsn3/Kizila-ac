@@ -355,23 +355,43 @@
     });
   }
 
-  function fixHomeHeader() {
-    if (!document.body.classList.contains('home')) return;
+  function syncHeaderHeight() {
+    var isMobile = window.matchMedia('(max-width: 767px)').matches;
+    var bar = isMobile
+      ? document.querySelector('.elementor-element-b145162:not([style*="display: none"])')
+      : document.querySelector('.elementor-element-bf83e51:not([style*="display: none"])');
 
-    var header = document.querySelector('.elementor-location-header');
-    if (header) {
-      header.style.setProperty('position', 'relative', 'important');
-      header.style.setProperty('top', 'auto', 'important');
-      header.style.setProperty('left', 'auto', 'important');
-      header.style.setProperty('right', 'auto', 'important');
-      header.style.setProperty('width', '100%', 'important');
-      header.style.setProperty('z-index', '1000', 'important');
-      header.style.setProperty('margin', '0', 'important');
-      header.style.setProperty('padding', '0', 'important');
+    if (!bar) return;
+
+    var style = getComputedStyle(bar);
+    if (style.display === 'none' || style.visibility === 'hidden') {
+      bar = document.querySelector('.elementor-element-b145162, .elementor-element-bf83e51');
     }
+    if (!bar) return;
+
+    var height = bar.getBoundingClientRect().height;
+    if (height > 32 && height < 100) {
+      document.documentElement.style.setProperty('--kiz-header-h', Math.round(height) + 'px');
+    }
+  }
+
+  function applySiteHeader() {
+    var header = document.querySelector('.elementor-location-header');
+    if (!header) return;
+
+    header.style.setProperty('position', 'fixed', 'important');
+    header.style.setProperty('top', '0', 'important');
+    header.style.setProperty('left', '0', 'important');
+    header.style.setProperty('right', '0', 'important');
+    header.style.setProperty('width', '100%', 'important');
+    header.style.setProperty('z-index', '1000', 'important');
+    header.style.setProperty('margin', '0', 'important');
+    header.style.setProperty('padding', '0', 'important');
+    header.style.setProperty('height', 'auto', 'important');
+    header.style.setProperty('min-height', '0', 'important');
 
     ['bf83e51', 'b145162'].forEach(function (id) {
-      var els = header ? header.querySelectorAll('.elementor-element-' + id) : [];
+      var els = header.querySelectorAll('.elementor-element-' + id);
       els.forEach(function (el, index) {
         if (index > 0) {
           el.remove();
@@ -382,20 +402,21 @@
         el.style.setProperty('left', 'auto', 'important');
         el.style.setProperty('right', 'auto', 'important');
         el.style.setProperty('width', '100%', 'important');
+        el.style.setProperty('margin', '0', 'important');
       });
     });
 
     var content = document.querySelector('#content.site-content');
     if (content) {
+      content.style.setProperty('padding-top', 'var(--kiz-header-h)', 'important');
       content.style.setProperty('margin-top', '0', 'important');
-      content.style.setProperty('padding-top', '0', 'important');
     }
 
-    var visibleBar = header && header.querySelector('.elementor-element-bf83e51:not([style*="display: none"])')
-      || header && header.querySelector('.elementor-element-b145162:not([style*="display: none"])');
-    if (visibleBar && visibleBar.offsetHeight > 40) {
-      document.documentElement.style.setProperty('--kiz-header-h', visibleBar.offsetHeight + 'px');
-    }
+    syncHeaderHeight();
+  }
+
+  function fixHomeHeader() {
+    applySiteHeader();
   }
 
   function fixPageScroll() {
@@ -493,6 +514,44 @@
     return parts.length ? '../'.repeat(parts.length) : './';
   }
 
+  function injectFooterInstagram() {
+    var footer = document.getElementById('colophon');
+    if (!footer) return;
+
+    var source = footer.querySelector('.elementor-social-icon-instagram');
+    if (!source) return;
+
+    var href = source.getAttribute('href') || 'https://www.instagram.com/kizilagacinsaat/';
+    var logoCol = footer.querySelector('.elementor-element-52f1016f');
+
+    if (logoCol && !logoCol.querySelector('.kiz-footer-instagram')) {
+      var mainLink = document.createElement('a');
+      mainLink.className = 'kiz-footer-instagram';
+      mainLink.href = href;
+      mainLink.target = '_blank';
+      mainLink.rel = 'noopener noreferrer';
+      mainLink.setAttribute('aria-label', 'Instagram');
+      mainLink.innerHTML =
+        '<svg viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>' +
+        '<span>Instagram</span>';
+      logoCol.appendChild(mainLink);
+    }
+
+    var bottomBar = footer.querySelector('.elementor-element-74819730 .e-con-inner');
+    if (bottomBar) {
+      bottomBar.style.setProperty('display', 'flex', 'important');
+      bottomBar.style.setProperty('flex-direction', 'row', 'important');
+      bottomBar.style.setProperty('align-items', 'center', 'important');
+      bottomBar.style.setProperty('justify-content', 'space-between', 'important');
+      bottomBar.style.setProperty('gap', '12px', 'important');
+    }
+
+    footer.querySelectorAll('.elementor-element-6b14c558 .elementor-social-icon').forEach(function (icon) {
+      icon.style.setProperty('width', '44px', 'important');
+      icon.style.setProperty('height', '44px', 'important');
+    });
+  }
+
   function fixFooter() {
     var footer = document.getElementById('colophon');
     if (!footer) return;
@@ -558,6 +617,8 @@
       el.style.setProperty('box-shadow', 'none', 'important');
     });
 
+    injectFooterInstagram();
+
     var showFooterCols = window.matchMedia('(min-width: 768px)').matches;
     footer.querySelectorAll('.elementor-element-48d6ff42, .elementor-element-1ed1b81d').forEach(function (col) {
       if (showFooterCols) {
@@ -593,7 +654,7 @@
     }
 
     if (bar.offsetHeight > 32) {
-      document.documentElement.style.setProperty('--kiz-header-h', bar.offsetHeight + 'px');
+      syncHeaderHeight();
     }
 
     var root = siteRootPrefix();
@@ -619,13 +680,7 @@
     if (document.body.classList.contains('home')) return;
 
     var root = siteRootPrefix();
-    var header = document.querySelector('.elementor-location-header');
-    if (header) {
-      var hh = header.offsetHeight;
-      if (hh > 40) {
-        document.documentElement.style.setProperty('--kiz-header-h', hh + 'px');
-      }
-    }
+    syncHeaderHeight();
 
     var first = document.querySelector('#content .entry-content > .elementor > .e-con.e-parent');
     if (!first) return;
@@ -690,7 +745,7 @@
 
   function init() {
     disableStickySpacers();
-    fixHomeHeader();
+    applySiteHeader();
     fixPageScroll();
     fixHeroBackgrounds();
     applyModernHeroBackgrounds();
@@ -711,13 +766,14 @@
   }
 
   window.addEventListener('resize', function () {
+    applySiteHeader();
     fixMobileHeader();
     fixFooter();
   });
 
   window.addEventListener('load', function () {
     disableStickySpacers();
-    fixHomeHeader();
+    applySiteHeader();
     fixPageScroll();
     disableLenisScroll();
     disableJarallax();
@@ -732,15 +788,16 @@
     fixMobileHeader();
     removeScrollToTop();
     window.setTimeout(fixPageScroll, 250);
-    window.setTimeout(fixHomeHeader, 250);
+    window.setTimeout(applySiteHeader, 250);
     window.setTimeout(fixMobileHeader, 250);
     window.setTimeout(forceHeroTextWhite, 100);
     window.setTimeout(forceHeroTextWhite, 500);
     window.setTimeout(function () {
       disableStickySpacers();
-      fixHomeHeader();
+      applySiteHeader();
       fixMobileHeader();
       fixPageScroll();
+      syncHeaderHeight();
     }, 1000);
   });
 

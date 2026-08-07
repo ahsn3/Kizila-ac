@@ -744,12 +744,97 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 
 #colophon .elementor-element-74819730 .e-con-inner {
   align-items: center !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  gap: 16px !important;
+}
+
+#colophon .elementor-element-473d67e2 {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+#colophon .elementor-element-2cb0922e {
+  flex: 0 0 auto !important;
+}
+
+#colophon .elementor-element-6b14c558 {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+
+#colophon .elementor-element-6b14c558 .elementor-social-icons-wrapper {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+#colophon .elementor-element-6b14c558 .elementor-social-icon {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(188, 24, 136, 0.35);
+}
+
+#colophon .elementor-element-6b14c558 .elementor-social-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+  fill: #fff !important;
+}
+
+#colophon .elementor-element-6b14c558 .elementor-social-icon:hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(188, 24, 136, 0.45);
+}
+
+#colophon {
+  padding-bottom: 80px !important;
+}
+
+.kiz-footer-instagram {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff !important;
+  text-decoration: none !important;
+  font-family: Roboto, "Golos Text", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 6px 20px rgba(188, 24, 136, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.kiz-footer-instagram svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+.kiz-footer-instagram:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(188, 24, 136, 0.45);
+  color: #fff !important;
 }
 
 #colophon .elementor-element-5d5b5d46 .ekit-heading,
 #colophon .elementor-element-5d5b5d46 .ekit-heading--title {
-  text-align: center !important;
-  color: rgba(255, 255, 255, 0.72) !important;
+  text-align: left !important;
+  color: rgba(255, 255, 255, 0.85) !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   letter-spacing: 0.02em;
@@ -760,18 +845,6 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
   color: inherit !important;
   text-decoration: none !important;
   pointer-events: none;
-}
-
-#colophon .elementor-element-6b14c558 .elementor-social-icon {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
-  border-radius: 50% !important;
-  transition: background 0.25s ease, transform 0.25s ease;
-}
-
-#colophon .elementor-element-6b14c558 .elementor-social-icon:hover {
-  background: #a62626 !important;
-  transform: translateY(-2px);
 }
 
 .hfe-reading-progress-bar {
@@ -785,12 +858,29 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 
 .elementor-location-header {
   z-index: 1000 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+#content.site-content {
+  padding-top: var(--kiz-header-h, 56px) !important;
+  margin-top: 0 !important;
 }
 
 .elementor-10968 .elementor-element-bf83e51,
 .elementor-10968 .elementor-element-b145162 {
   z-index: 1000 !important;
   width: 100% !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
 }
 
 .elementor-10968 .elementor-element-6ee86a0 {
@@ -799,27 +889,18 @@ sr7-slide.sr7-static-active a.sr7-layer:nth-of-type(3) {
 }
 
 body.home .elementor-location-header {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
   width: 100% !important;
   z-index: 1000 !important;
   height: auto !important;
   margin: 0 !important;
   padding: 0 !important;
   pointer-events: auto;
-}
-
-body.home .elementor-location-header > .elementor-element-bf83e51,
-body.home .elementor-location-header > .elementor-element-b145162 {
-  pointer-events: auto;
-}
-
-/* ElementsKit sticky clones the header bar — hide duplicates */
-body.home .elementor-location-header > .elementor-element-bf83e51 ~ .elementor-element-bf83e51,
-body.home .elementor-location-header > .elementor-element-b145162 ~ .elementor-element-b145162 {
-  display: none !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 body.home .elementor-10968 .elementor-element-bf83e51,
@@ -829,11 +910,22 @@ body.home .elementor-10968 .elementor-element-b145162 {
   left: auto !important;
   right: auto !important;
   width: 100% !important;
-  background-color: rgba(242, 240, 235, 0.92) !important;
+  background-color: rgba(242, 240, 235, 0.96) !important;
+  box-shadow: 0 2px 16px rgba(28, 28, 29, 0.08);
 }
 
 body.home #content.site-content,
-body.home #page .site-content,
+body.home #page .site-content {
+  padding-top: var(--kiz-header-h, 56px) !important;
+  margin-top: 0 !important;
+}
+
+/* ElementsKit sticky clones the header bar — hide duplicates */
+.elementor-location-header > .elementor-element-bf83e51 ~ .elementor-element-bf83e51,
+.elementor-location-header > .elementor-element-b145162 ~ .elementor-element-b145162 {
+  display: none !important;
+}
+
 body.home #content .col-full,
 body.home .elementor-element-f98ed7f,
 body.home .elementor-element-f98ed7f > .e-con-inner {
@@ -841,22 +933,6 @@ body.home .elementor-element-f98ed7f > .e-con-inner {
   padding-top: 0 !important;
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
-}
-
-body.home .elementor-widget-slider_revolution,
-body.home .elementor-widget-slider_revolution .elementor-widget-container,
-body.home .wp-block-themepunch-revslider {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* Inner pages: fixed header overlays hero — no document-flow gap */
-body:not(.home) .elementor-location-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
 }
 
 body:not(.home) .elementor-10968 .elementor-element-bf83e51,
@@ -869,12 +945,23 @@ body:not(.home) .elementor-10968 .elementor-element-b145162 {
   box-shadow: 0 2px 16px rgba(28, 28, 29, 0.08);
 }
 
+body.home .elementor-widget-slider_revolution,
+body.home .elementor-widget-slider_revolution .elementor-widget-container,
+body.home .wp-block-themepunch-revslider {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 body:not(.home) .elementor-10968 .elementor-element-bf83e51:not(.elementor-motion-effects-element-type-background),
 body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motion-effects-element-type-background) {
   background-color: #f2f0eb !important;
 }
 
 @media (min-width: 768px) {
+  .elementor-10968 .elementor-element-b145162 {
+    display: none !important;
+  }
+
   .elementor-10968 .elementor-element.elementor-element-6ee86a0 {
     display: flex !important;
     flex-direction: row !important;
@@ -998,9 +1085,7 @@ body:not(.home) .elementor-10968 .elementor-element-b145162:not(.elementor-motio
   }
 }
 
-/* ---- Inner pages: flush hero under fixed navbar ---- */
-body:not(.home) #page .site-content,
-body:not(.home) #content.site-content,
+/* ---- Inner pages: content below fixed navbar ---- */
 body:not(.home) #content .col-full,
 body:not(.home) #content #primary,
 body:not(.home) #content .site-main,
@@ -1016,7 +1101,7 @@ body:not(.home) #content .entry-content > .elementor > .e-con.e-parent:first-chi
 
 body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero {
   margin-top: 0 !important;
-  padding-top: clamp(88px, 14vw, 150px) !important;
+  padding-top: clamp(48px, 8vw, 96px) !important;
   padding-bottom: clamp(56px, 8vw, 120px) !important;
   background-size: cover !important;
   background-position: center center !important;
@@ -1036,7 +1121,7 @@ body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero [class*="m
 
 body:not(.home) #content .entry-content .e-con.e-parent.kiz-page-hero-solid {
   margin-top: 0 !important;
-  padding-top: calc(var(--kiz-header-h) + 24px) !important;
+  padding-top: clamp(24px, 4vw, 48px) !important;
   padding-bottom: clamp(24px, 4vw, 48px) !important;
 }
 
@@ -1413,10 +1498,16 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
   }
 
   /* Compact mobile navbar: logo left, language + hamburger right */
+  .elementor-10968 .elementor-element-bf83e51 {
+    display: none !important;
+  }
+
   .elementor-10968 .elementor-element-b145162 {
     position: relative !important;
     top: auto !important;
     min-height: 0 !important;
+    max-height: none !important;
+    padding: 0 !important;
   }
 
   .elementor-10968 .elementor-element-b145162 > .e-con-inner {
@@ -1429,8 +1520,9 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
-    padding: 10px 16px !important;
-    min-height: var(--kiz-header-h) !important;
+    padding: 8px 16px !important;
+    min-height: 0 !important;
+    max-height: 56px !important;
   }
 
   .elementor-10968 .elementor-element-c3fba59,
@@ -1586,5 +1678,19 @@ body:not(.home) .kiz-page-hero > .e-con-inner {
   #colophon .elementor-element-5d5b5d46 .ekit-heading--title {
     font-size: 12px !important;
     line-height: 1.45 !important;
+    text-align: left !important;
+  }
+
+  .kiz-footer-instagram {
+    display: inline-flex !important;
+  }
+
+  #colophon .elementor-element-74819730 .e-con-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  #colophon .elementor-element-6b14c558 {
+    display: none !important;
   }
 }
